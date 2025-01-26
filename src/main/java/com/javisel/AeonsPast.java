@@ -1,5 +1,7 @@
 package com.javisel;
 
+import com.javisel.common.registration.AttributeRegistration;
+import com.javisel.common.registration.DamageTypeRegistration;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -73,13 +75,14 @@ public class AeonsPast
     {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
-
+        DamageTypeRegistration.DAMAGE_TYPES.register(modEventBus);
         // Register the Deferred Register to the mod event bus so blocks get registered
         BLOCKS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so items get registered
         ITEMS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
+        AttributeRegistration.ATTRIBUTES.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (AeonsPast) to respond directly to events.
