@@ -1,0 +1,20 @@
+{
+  "rarity": "RARE",
+  "armor_type": "BOOTS",
+  "statistics": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "operation": "ADDITION",
+      "min": 20,
+      "max": 30
+    },
+    {
+      "attribute": "aeonspast:armor",
+      "operation": "ADDITION",
+      "min": 6,
+      "max": 8
+    }
+  ],
+  "properties": [
+  ]
+}

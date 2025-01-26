@@ -1,0 +1,20 @@
+{
+  "rarity": "COMMON",
+  "armor_type": "LEGGINGS",
+  "statistics": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "operation": "ADDITION",
+      "min": 12,
+      "max": 14
+    },
+    {
+      "attribute": "aeonspast:armor",
+      "operation": "ADDITION",
+      "min": 6,
+      "max": 19
+    }
+  ],
+  "properties": [
+  ]
+}

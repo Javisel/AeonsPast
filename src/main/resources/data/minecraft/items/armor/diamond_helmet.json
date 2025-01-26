@@ -1,0 +1,20 @@
+{
+  "rarity": "RARE",
+  "armor_type": "HELMET",
+  "statistics": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "operation": "ADDITION",
+      "min": 20,
+      "max": 36
+    },
+    {
+      "attribute": "aeonspast:armor",
+      "operation": "ADDITION",
+      "min": 3,
+      "max": 6
+    }
+  ],
+  "properties": [
+  ]
+}

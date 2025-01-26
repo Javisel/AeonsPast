@@ -1,0 +1,28 @@
+{
+  "rarity": "COMMON",
+  "armor_type": "LEGGINGS",
+  "statistics": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "operation": "ADDITION",
+      "min": 2.5,
+      "max": 10
+    },
+    {
+      "attribute": "aeonspast:armor",
+      "operation": "ADDITION",
+      "min": 0.6,
+      "max": 2.2
+    },
+    {
+      "attribute": "minecraft:generic.movement_speed",
+      "operation": "MULTIPLY_TOTAL",
+      "min": 0.01,
+      "max": 0.03
+    }
+  ],
+  "properties": [
+    "aeonspast:nimble",
+    "aeonspast:dyeable"
+  ]
+}

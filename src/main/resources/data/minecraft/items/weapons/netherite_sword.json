@@ -1,0 +1,50 @@
+{
+  "weapon_type": "SWORD",
+  "rarity": "EPIC",
+  "attack_damage": {
+    "min": 15,
+    "max": 55
+  },
+  "attack_speed": {
+    "min": 1.52,
+    "max": 2.4
+  },
+  "critical_chance": {
+    "min": 0,
+    "max": 0
+  },
+  "critical_damage": {
+    "min": 2,
+    "max": 2
+  },
+  "durability": {
+    "min": 1421.7,
+    "max": 2640.3
+  },
+  "status_chance": {
+    "min": 20,
+    "max": 40
+  },
+  "enchantability": {
+    "min": 5,
+    "max": 5
+  },
+  "range": {
+    "min": 4,
+    "max": 4
+  },
+  "is_ranged": "false",
+  "secondarydata": [],
+  "properties": [
+    "aeonspast:fireproof",
+    "aeonspast:versatile",
+    "aeonspast:sweeping",
+    "aeonspast:kinetic",
+    "aeonspast:brutal"
+  ],
+  "spells": [
+    "aeonspast:true_strike",
+    "aeonspast:double_slash",
+    "aeonspast:cleave"
+  ]
+}

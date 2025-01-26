@@ -1,0 +1,43 @@
+{
+  "weapon_power": 5,
+  "weapon_power_scaling": 1,
+  "physical_power": 0,
+  "physical_power_scaling": 0,
+  "magical_power": 0,
+  "magical_power_scaling": 0,
+  "attack_speed": 0,
+  "attack_speed_scaling": 0.012,
+  "max_health": 150,
+  "max_health_scaling": 15,
+  "health_regeneration": 2.25,
+  "health_regeneration_scaling": 0.3375,
+  "armor": 6,
+  "armor_scaling": 0.39,
+  "magic_resist": 3.35,
+  "magic_resist_scaling": 0.15,
+  "max_resource": 130,
+  "resource_scaling": 13,
+  "resource_regeneration": 1.25,
+  "resource_regeneration_scaling": 0.015,
+  "movement_speed": 0,
+  "movement_speed_scaling": 0,
+  "spells": [
+    "aeonspast:hop",
+    "aeonspast:warrior_class_spell",
+    "aeonspast:swift_strikes",
+    "aeonspast:taunt",
+    "aeonspast:shout",
+    "aeonspast:bolster_defences",
+    "aeonspst:sentinel_of_hope",
+    "aeonspast:earthshaker",
+    "aeonspast:cleaving_strike"
+  ],
+  "weapon_types": [
+    "aeonspast:sword",
+    "aeonspast:dagger",
+    "aeonspast:spear",
+    "aeonspast:bow",
+    "aeonspast:shortbow",
+    "aeonspast:crossbow"
+  ]
+}

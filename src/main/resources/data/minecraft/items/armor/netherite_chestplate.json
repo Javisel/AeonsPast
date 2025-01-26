@@ -1,0 +1,21 @@
+{
+  "rarity": "EPIC",
+  "armor_type": "CHESTPLATE",
+  "statistics": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "operation": "ADDITION",
+      "min": 36,
+      "max": 48
+    },
+    {
+      "attribute": "aeonspast:armor",
+      "operation": "ADDITION",
+      "min": 11,
+      "max": 22
+    }
+  ],
+  "properties": [
+    "aeonspast:fireproof"
+  ]
+}

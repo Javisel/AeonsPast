@@ -1,0 +1,16 @@
+{
+  "properties": [
+    {
+      "name": "base_attack_speed",
+      "property": "aeonspast:numeric_property",
+      "type": "attribute",
+      "value": 0.3
+    },
+    {
+      "name": "magic_power_scaling",
+      "property": "aeonspast:numeric_property",
+      "type": "attribute",
+      "value": 0.015
+    }
+  ]
+}

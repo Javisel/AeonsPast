@@ -1,0 +1,27 @@
+{
+  "rarity": "COMMON",
+  "armor_type": "BOOTS",
+  "statistics": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "operation": "ADDITION",
+      "min": 2,
+      "max": 10
+    },
+    {
+      "attribute": "aeonspast:armor",
+      "operation": "ADDITION",
+      "min": 0.9,
+      "max": 1.1
+    },
+    {
+      "attribute": "minecraft:generic.movement_speed",
+      "operation": "MULTIPLY_TOTAL",
+      "min": 0.02,
+      "max": 0.04
+    }
+  ],
+  "properties": [
+    "aeonspast:nimble"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "weapon_type": "SWORD",
+  "rarity": "COMMON",
+  "attack_damage": {
+    "min": 6,
+    "max": 28
+  },
+  "attack_speed": {
+    "min": 1.45,
+    "max": 1.77
+  },
+  "critical_chance": {
+    "min": 0,
+    "max": 0
+  },
+  "critical_damage": {
+    "min": 2,
+    "max": 2
+  },
+  "durability": {
+    "min": 30,
+    "max": 107
+  },
+  "status_chance": {
+    "min": 20,
+    "max": 40
+  },
+  "enchantability": {
+    "min": 22,
+    "max": 22
+  },
+  "range": {
+    "min": 4,
+    "max": 4
+  },
+  "is_ranged": "false",
+  "secondarydata": [],
+  "properties": [
+    "aeonspast:gilded_weapon",
+    "aeonspast:versatile",
+    "aeonspast:sweeping",
+    "aeonspast:kinetic",
+    "aeonspast:brutal"
+  ],
+  "spells": [
+    "aeonspast:true_strike",
+    "aeonspast:double_slash",
+    "aeonspast:cleave"
+  ]
+}

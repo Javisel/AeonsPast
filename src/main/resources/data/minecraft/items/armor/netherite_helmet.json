@@ -1,0 +1,21 @@
+{
+  "rarity": "EPIC",
+  "armor_type": "HELMET",
+  "statistics": [
+    {
+      "attribute": "minecraft:generic.max_health",
+      "operation": "ADDITION",
+      "min": 22,
+      "max": 38
+    },
+    {
+      "attribute": "aeonspast:armor",
+      "operation": "ADDITION",
+      "min": 4,
+      "max": 7
+    }
+  ],
+  "properties": [
+    "aeonspast:fireproof"
+  ]
+}
