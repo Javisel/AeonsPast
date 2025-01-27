@@ -3,58 +3,69 @@ package com.javisel.common.particles;
 import com.javisel.common.combat.DamageTypes;
 import com.javisel.common.registration.ParticleTypeRegistration;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.TrailParticleOption;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.PlainTextContents;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.phys.Vec3;
 
-public class WorldTextParticleOptions implements ParticleOptions {
+public record WorldTextParticleOptions(String text, int colour) implements ParticleOptions {
 
-    private Component component;
 
-    public static final MapCodec<WorldTextParticleOptions> CODEC = MapCodec.unit(new WorldTextParticleOptions());
+    public static final MapCodec<WorldTextParticleOptions> CODEC = RecordCodecBuilder.mapCodec(
+            p_382882_ -> p_382882_.group(
+                            ExtraCodecs.ESCAPED_STRING.fieldOf("text").forGetter(WorldTextParticleOptions::text),
+                            ExtraCodecs.RGB_COLOR_CODEC.fieldOf("colour").forGetter(WorldTextParticleOptions::colour)
 
+
+
+                    )
+                    .apply(p_382882_, WorldTextParticleOptions::new)
+    );
     // Read and write information to the network buffer.
-    public static final StreamCodec<ByteBuf, WorldTextParticleOptions> STREAM_CODEC = StreamCodec.unit(new WorldTextParticleOptions());
+    public static final StreamCodec<RegistryFriendlyByteBuf, WorldTextParticleOptions> STREAM_CODEC = StreamCodec.composite(
+
+            ByteBufCodecs.STRING_UTF8,
+            WorldTextParticleOptions::text,
+            ByteBufCodecs.VAR_INT,
+            WorldTextParticleOptions::colour,
+            WorldTextParticleOptions::new
+    );
 
     @Override
     public ParticleType<?> getType() {
         return ParticleTypeRegistration.WORLD_TEXT_TYPE.get();
     }
 
-    public Component getComponent() {
-        return component;
-    }
+
 
     public static WorldTextParticleOptions getWorldNumberOptionByDamage(DamageTypes type, float amount, int criticals) {
 
 
-        WorldTextParticleOptions worldNumberOptions = new WorldTextParticleOptions();
+        String text = String.format("%.2f", amount);
+
+
+        WorldTextParticleOptions worldNumberOptions = new WorldTextParticleOptions(text, type.getColor());
 
 
 
-        worldNumberOptions.component = MutableComponent.create(PlainTextContents.EMPTY);
-
-        worldNumberOptions.component.copy().append(Float.toString(amount));
-        worldNumberOptions.component = worldNumberOptions.component.copy().withStyle(Style.EMPTY.withColor(type.getColor()));
 
 
-        for (int i = 0; i < criticals;i++ ) {
-            worldNumberOptions.component = worldNumberOptions.component.copy().append("!");
+            text +="!";
 
 
-        }
 
-        if (criticals>0) {
-            worldNumberOptions.component = worldNumberOptions.component.copy().withStyle(ChatFormatting.BOLD);
-
-        }
 
         return worldNumberOptions;
 
