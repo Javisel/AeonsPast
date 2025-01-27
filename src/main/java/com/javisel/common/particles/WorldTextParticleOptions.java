@@ -6,6 +6,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.TrailParticleOption;
@@ -21,6 +22,10 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.phys.Vec3;
 
 public record WorldTextParticleOptions(String text, int colour) implements ParticleOptions {
+
+    public WorldTextParticleOptions(Component component, int colour, HolderLookup.Provider registries) {
+        this(Component.Serializer.toJson(component,registries),colour);
+    }
 
 
     public static final MapCodec<WorldTextParticleOptions> CODEC = RecordCodecBuilder.mapCodec(
