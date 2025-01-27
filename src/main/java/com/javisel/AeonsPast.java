@@ -95,7 +95,7 @@ public class AeonsPast
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
 
-        NeoForge.EVENT_BUS.addListener(this::testEvent);
+
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -121,12 +121,6 @@ public class AeonsPast
             event.accept(EXAMPLE_BLOCK_ITEM);
     }
 
-    private void testEvent(LivingDamageEvent.Post event) {
-        LivingEntity entity = event.getEntity();
-        WorldTextParticleOptions worldTextParticleOptions = new WorldTextParticleOptions("Stunned!",0xffffffff);
-        ServerLevel level = (ServerLevel) entity.level();
-        level.sendParticles(worldTextParticleOptions,entity.getX(),entity.getEyeY(),entity.getZ(),5,0,0,0,0);
-    }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)

@@ -50,7 +50,7 @@ public record WorldTextParticleOptions(String text, int colour) implements Parti
 
     @Override
     public ParticleType<?> getType() {
-        return ParticleTypeRegistration.WORLD_TEXT_TYPE.get();
+        return ParticleTypeRegistration.WORLD_TEXT_PARTICLE.get();
     }
 
 

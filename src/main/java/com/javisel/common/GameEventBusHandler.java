@@ -1,6 +1,9 @@
 package com.javisel.common;
 
 import com.javisel.common.combat.DamageTypes;
+import com.javisel.common.particles.WorldTextParticleOptions;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -8,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 
@@ -15,41 +19,30 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 public class GameEventBusHandler {
 
     @SubscribeEvent
-    public static void newDamageTypes(LivingIncomingDamageEvent event) {
-
-        String name = event.getSource().typeHolder().getRegisteredName();
-        LivingEntity entity = event.getEntity();
-
-        DamageSource source = event.getSource();
-        Entity sourceEntity =  event.getSource().getEntity();
-        Entity directEntity = event.getSource().getDirectEntity();
+    public static void testEvent(LivingDamageEvent.Post event) {
 
 
-        if (sourceEntity instanceof ServerPlayer serverPlayer) {
+        if (event.getSource().getEntity() instanceof ServerPlayer serverPlayer) {
 
-            /*
-         ServerLevel serverLevel = serverPlayer.serverLevel();
+            LivingEntity entity = event.getEntity();
 
 
 
-            double xpos = entity.getX();
-            double ypos = entity.getY() + entity.getBbHeight() + 0.1;
-            double zpos = entity.getZ();
-
-            double xd = 0;
-            double yd = 0;
-            double zd = 0;
-
-            serverLevel.sendParticles(serverPlayer, textParticleOptions, true, true, xpos, ypos, zpos, 1, xd, yd, zd, 0d);
+            Component component = Component.empty();
+            MutableComponent mutableComponent = component.copy();
+            mutableComponent.append(String.format("%.2f",event.getNewDamage()));
+            mutableComponent = mutableComponent.withColor(DamageTypes.RADIANT.getColor());
 
 
-             */
+
+            ServerLevel level = (ServerLevel) entity.level();
+            WorldTextParticleOptions worldTextParticleOptions = new WorldTextParticleOptions(mutableComponent,0,level.registryAccess());
+            level.sendParticles(serverPlayer,worldTextParticleOptions,true,true,entity.getX(),entity.getEyeY(),entity.getZ(),1,0,0,0,0);
+
 
 
 
         }
-
-
 
 
 
