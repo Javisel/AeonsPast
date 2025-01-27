@@ -1,6 +1,7 @@
 package com.javisel.common.registration;
 
 import com.javisel.AeonsPast;
+import com.javisel.common.particles.WorldTextParticleType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
@@ -21,5 +22,10 @@ public class ParticleTypeRegistration {
             // most vanilla particles, but true for e.g. explosions, campfire smoke, or squid ink.
             () -> new SimpleParticleType(false)
     );
+    public static final DeferredHolder<ParticleType<?>, WorldTextParticleType> WORLD_TEXT_PARTICLE = PARTICLE_TYPES.register(
+            // The name of the particle type.
+            "world_text_particle",
 
+            () -> new WorldTextParticleType(true)
+    );
 }

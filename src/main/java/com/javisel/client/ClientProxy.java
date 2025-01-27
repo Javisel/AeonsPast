@@ -1,6 +1,7 @@
 package com.javisel.client;
 
 import com.javisel.client.particles.DamageTypeParticle;
+import com.javisel.client.particles.WorldTextParticle;
 import com.javisel.common.registration.ParticleTypeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleEngine;
@@ -30,7 +31,7 @@ public class ClientProxy {
             Minecraft minecraft = Minecraft.getInstance();
             ParticleEngine particleEngine = minecraft.particleEngine;
 
-            particleEngine.register(ParticleTypeRegistration.WORLD_TEXT_TYPE.get(), new WorldTextParticle.Provider());
+            particleEngine.register(ParticleTypeRegistration.WORLD_TEXT_PARTICLE.get(), new WorldTextParticle.Provider());
             event.registerSpriteSet(ParticleTypeRegistration.DAMAGE_TYPE_PARTICLE.get(), DamageTypeParticle.DamageTypeParticleProvider::new);
 
         }

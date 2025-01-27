@@ -1,7 +1,12 @@
 package com.javisel;
 
+import com.javisel.common.particles.WorldTextParticleOptions;
 import com.javisel.common.registration.AttributeRegistration;
 import com.javisel.common.registration.ParticleTypeRegistration;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -86,10 +91,11 @@ public class AeonsPast
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (AeonsPast) to respond directly to events.
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
-        NeoForge.EVENT_BUS.register(this);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
+
+
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -115,13 +121,6 @@ public class AeonsPast
             event.accept(EXAMPLE_BLOCK_ITEM);
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
-    }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
