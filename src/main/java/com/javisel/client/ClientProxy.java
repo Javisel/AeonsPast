@@ -1,10 +1,8 @@
 package com.javisel.client;
 
 import com.javisel.client.particles.DamageTypeParticle;
-import com.javisel.client.particles.WorldTextParticle;
 import com.javisel.common.registration.ParticleTypeRegistration;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;

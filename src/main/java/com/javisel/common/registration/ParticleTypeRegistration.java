@@ -1,7 +1,6 @@
 package com.javisel.common.registration;
 
 import com.javisel.AeonsPast;
-import com.javisel.common.particles.WorldTextParticleType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
@@ -13,7 +12,6 @@ public class ParticleTypeRegistration {
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(Registries.PARTICLE_TYPE, AeonsPast.MODID);
 
 
-    public static final DeferredHolder<ParticleType<?>, WorldTextParticleType> WORLD_TEXT_TYPE = PARTICLE_TYPES.register("world_text_type", ()->new WorldTextParticleType(true));
 
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> DAMAGE_TYPE_PARTICLE = PARTICLE_TYPES.register(
             // The name of the particle type.

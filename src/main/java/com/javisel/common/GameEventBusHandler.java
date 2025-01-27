@@ -1,20 +1,14 @@
 package com.javisel.common;
 
-import com.javisel.common.combat.DamageEngine;
 import com.javisel.common.combat.DamageTypes;
-import com.javisel.common.particles.WorldTextParticleOptions;
-import com.javisel.common.registration.ParticleTypeRegistration;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
-
-import java.util.Random;
 
 
 @EventBusSubscriber
@@ -33,9 +27,8 @@ public class GameEventBusHandler {
 
         if (sourceEntity instanceof ServerPlayer serverPlayer) {
 
+            /*
          ServerLevel serverLevel = serverPlayer.serverLevel();
-
-         WorldTextParticleOptions textParticleOptions = WorldTextParticleOptions.getWorldNumberOptionByDamage(DamageTypes.ARCANE,15,1);
 
 
 
@@ -49,6 +42,8 @@ public class GameEventBusHandler {
 
             serverLevel.sendParticles(serverPlayer, textParticleOptions, true, true, xpos, ypos, zpos, 1, xd, yd, zd, 0d);
 
+
+             */
 
 
 
