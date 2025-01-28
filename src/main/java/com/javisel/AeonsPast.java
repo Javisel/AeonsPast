@@ -1,11 +1,13 @@
 package com.javisel;
 
+import com.javisel.common.entity.EntityDataLoader;
 import com.javisel.common.particles.WorldTextParticleOptions;
 import com.javisel.common.registration.AttributeRegistration;
 import com.javisel.common.registration.ParticleTypeRegistration;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.slf4j.Logger;
 
@@ -48,7 +50,7 @@ public class AeonsPast
     // Define mod id in a common place for everything to reference
     public static final String MODID = "aeonspast";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     // Create a Deferred Register to hold Blocks which will all be registered under the "aeonspast" namespace
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
     // Create a Deferred Register to hold Items which will all be registered under the "aeonspast" namespace
@@ -121,6 +123,13 @@ public class AeonsPast
             event.accept(EXAMPLE_BLOCK_ITEM);
     }
 
+    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD)
+    public static class CommonModEvents {
+        @SubscribeEvent
+        public static void onAddReloadListener(AddReloadListenerEvent event) {
+            event.addListener(new EntityDataLoader());
+        }
+    }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
