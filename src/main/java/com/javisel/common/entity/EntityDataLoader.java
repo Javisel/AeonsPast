@@ -1,10 +1,7 @@
 package com.javisel.common.entity;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.javisel.AeonsPast;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
@@ -23,13 +20,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EntityDataLoader extends SimplePreparableReloadListener<Map<ResourceLocation, EntityStatisticalData>> {
-    private static final Gson GSON_INSTANCE = new Gson();
+    private static final Gson GSON_INSTANCE = new GsonBuilder().setPrettyPrinting().create();
     private static final String folder = "entities";
 
     public static final Map<ResourceLocation, EntityStatisticalData> ENTITY_DATA = new HashMap<>();
@@ -40,7 +34,7 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
 
         ResourceLocation resourceLocation = ResourceLocation.tryBuild(AeonsPast.MODID, "tags/entity_types/entity_types.json");
 
-        ArrayList<ResourceLocation> finalLocations = new ArrayList<>();
+        HashSet<ResourceLocation> finalLocations = new HashSet<>();
 
         try {
             for (Resource resource : resourceManager.getResourceStack(resourceLocation)) {
@@ -59,7 +53,6 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
                     for (JsonElement entry : entryList) {
                         String loc = entry.getAsString();
                         ResourceLocation res = ResourceLocation.tryParse(loc);
-                        finalLocations.remove(res); // remove first if it already exists to avoid duplicates
                         finalLocations.add(res);
                     }
                 }
@@ -68,7 +61,7 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
                 finalLocations.forEach(location -> {
                     try {
                         // resourceList.get(location) is the JSON element specific to that entity
-                        JsonElement jsonElement = resourceManager.getResource(ResourceLocation.tryBuild(AeonsPast.MODID, folder + "/" + location.getPath() + ".json")).map(is -> {
+                        JsonElement jsonElement = resourceManager.getResource(ResourceLocation.tryBuild(location.getNamespace(), folder + "/" + location.getPath() + ".json")).map(is -> {
                             try (BufferedReader reader = new BufferedReader(new InputStreamReader(is.open()))) {
                                 return GsonHelper.fromJson(GSON_INSTANCE, reader, JsonElement.class);
                             } catch (IOException e) {
@@ -86,7 +79,7 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
                 });
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            AeonsPast.LOGGER.error("Couldn't read entity types {}", resourceLocation, e);
         }
         
         return builder.build();
@@ -131,15 +124,14 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
     private EntityStatisticalData parseLegacyJson(ResourceLocation location, JsonObject json) {
         AeonsPast.LOGGER.warn("Falling back to legacy JSON parsing for entity {}", location);
 
-        // Adjust these lookups and defaults for your actual data schema.
         double attackDamage            = GsonHelper.getAsDouble(json, "attack_damage");
         double attackDamageScaling     = GsonHelper.getAsDouble(json, "attack_damage_scaling");
         double attackSpeed             = GsonHelper.getAsDouble(json, "attack_speed");
         double attackSpeedScaling      = GsonHelper.getAsDouble(json, "attack_speed_scaling");
         double physicalPower           = GsonHelper.getAsDouble(json, "physical_power");
         double physicalPowerScaling    = GsonHelper.getAsDouble(json, "physical_power_scaling");
-        double magicalPower            = GsonHelper.getAsDouble(json, "magical_power");
-        double magicalPowerScaling     = GsonHelper.getAsDouble(json, "magical_power_scaling");
+        double magicPower            = GsonHelper.getAsDouble(json, "magic_power");
+        double magicPowerScaling     = GsonHelper.getAsDouble(json, "magic_power_scaling");
         double maxHealth               = GsonHelper.getAsDouble(json, "max_health");
         double maxHealthScaling        = GsonHelper.getAsDouble(json, "max_health_scaling");
         double healthRegen             = GsonHelper.getAsDouble(json, "health_regeneration");
@@ -150,7 +142,7 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
         double magicResistScaling      = GsonHelper.getAsDouble(json, "magic_resist_scaling");
         double movementSpeed           = GsonHelper.getAsDouble(json, "movement_speed");
         double movementSpeedScaling    = GsonHelper.getAsDouble(json, "movement_speed_scaling");
-        double baseExperience          = GsonHelper.getAsDouble(json, "base_experience");
+        double experience          = GsonHelper.getAsDouble(json, "experience");
         double experienceScaling       = GsonHelper.getAsDouble(json, "experience_scaling");
 
         // For traits, you might store them as a simple array of strings in the legacy format.
@@ -170,8 +162,8 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
                         attackSpeedScaling,
                         physicalPower,
                         physicalPowerScaling,
-                        magicalPower,
-                        magicalPowerScaling
+                        magicPower,
+                        magicPowerScaling
                 ),
                 new EntityStatisticalData.DefenseStats(
                         maxHealth,
@@ -185,7 +177,7 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
                 ),
                 movementSpeed,
                 movementSpeedScaling,
-                baseExperience,
+                experience,
                 experienceScaling,
                 entityTraits
         );

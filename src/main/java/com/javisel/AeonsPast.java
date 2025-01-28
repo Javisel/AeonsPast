@@ -123,7 +123,7 @@ public class AeonsPast
             event.accept(EXAMPLE_BLOCK_ITEM);
     }
 
-    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.GAME)
     public static class CommonModEvents {
         @SubscribeEvent
         public static void onAddReloadListener(AddReloadListenerEvent event) {

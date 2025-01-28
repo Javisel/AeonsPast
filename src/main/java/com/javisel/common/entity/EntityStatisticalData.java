@@ -11,7 +11,7 @@ public record EntityStatisticalData(
         DefenseStats defenseStats,
         double movement_speed,
         double movement_speed_scaling,
-        double base_experience,
+        double experience,
         double experience_scaling,
         List<String> entity_traits
 ) {
@@ -31,8 +31,8 @@ public record EntityStatisticalData(
                             .forGetter(EntityStatisticalData::movement_speed),
                     Codec.DOUBLE.fieldOf("movement_speed_scaling")
                             .forGetter(EntityStatisticalData::movement_speed_scaling),
-                    Codec.DOUBLE.fieldOf("base_experience")
-                            .forGetter(EntityStatisticalData::base_experience),
+                    Codec.DOUBLE.fieldOf("experience")
+                            .forGetter(EntityStatisticalData::experience),
                     Codec.DOUBLE.fieldOf("experience_scaling")
                             .forGetter(EntityStatisticalData::experience_scaling),
                     Codec.STRING.listOf().fieldOf("entity_traits")
@@ -125,8 +125,8 @@ public record EntityStatisticalData(
             double attack_speed_scaling,
             double physical_power,
             double physical_power_scaling,
-            double magical_power,
-            double magical_power_scaling
+            double magic_power,
+            double magic_power_scaling
     ) {
         public static final Codec<OffenseStats> CODEC = RecordCodecBuilder.create(instance ->
                 instance.group(
@@ -142,10 +142,10 @@ public record EntityStatisticalData(
                                 .forGetter(OffenseStats::physical_power),
                         Codec.DOUBLE.fieldOf("physical_power_scaling")
                                 .forGetter(OffenseStats::physical_power_scaling),
-                        Codec.DOUBLE.fieldOf("magical_power")
-                                .forGetter(OffenseStats::magical_power),
-                        Codec.DOUBLE.fieldOf("magical_power_scaling")
-                                .forGetter(OffenseStats::magical_power_scaling)
+                        Codec.DOUBLE.fieldOf("magic_power")
+                                .forGetter(OffenseStats::magic_power),
+                        Codec.DOUBLE.fieldOf("magic_power_scaling")
+                                .forGetter(OffenseStats::magic_power_scaling)
                 ).apply(instance, OffenseStats::new)
         );
     }
