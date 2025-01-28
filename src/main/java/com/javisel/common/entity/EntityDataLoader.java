@@ -23,10 +23,9 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class EntityDataLoader extends SimplePreparableReloadListener<Map<ResourceLocation, EntityStatisticalData>> {
+    public static final Map<ResourceLocation, EntityStatisticalData> ENTITY_STATISTICAL_DATA = new HashMap<>();
     private static final Gson GSON_INSTANCE = new GsonBuilder().setPrettyPrinting().create();
     private static final String folder = "entities";
-
-    public static final Map<ResourceLocation, EntityStatisticalData> ENTITY_DATA = new HashMap<>();
 
     @Override
     protected Map<ResourceLocation, EntityStatisticalData> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
@@ -81,22 +80,22 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
         } catch (IOException e) {
             AeonsPast.LOGGER.error("Couldn't read entity types {}", resourceLocation, e);
         }
-        
+
         return builder.build();
     }
 
     @Override
     protected void apply(Map<ResourceLocation, EntityStatisticalData> entityStatisticsMap, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        ENTITY_DATA.clear();
-        ENTITY_DATA.putAll(entityStatisticsMap);
+        ENTITY_STATISTICAL_DATA.clear();
+        ENTITY_STATISTICAL_DATA.putAll(entityStatisticsMap);
     }
 
     /**
      * Attempts to parse entity properties from JSON. It first tries to use your new codec
      * (EntityStatisticalData.CODEC). If that fails or the JSON data doesn't match the structure,
-     * it falls back to parseLegacyJson, which manually reads top-level fields.
+     * it falls back to parseLegacyJson, which manually reads top-level fields and converts them.
      *
-     * @param location ResourceLocation of the entity
+     * @param location    ResourceLocation of the entity
      * @param jsonElement The JSON Element containing entity data
      * @return An EntityStatisticalData object or null if invalid JSON
      */
@@ -124,26 +123,26 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
     private EntityStatisticalData parseLegacyJson(ResourceLocation location, JsonObject json) {
         AeonsPast.LOGGER.warn("Falling back to legacy JSON parsing for entity {}", location);
 
-        double attackDamage            = GsonHelper.getAsDouble(json, "attack_damage");
-        double attackDamageScaling     = GsonHelper.getAsDouble(json, "attack_damage_scaling");
-        double attackSpeed             = GsonHelper.getAsDouble(json, "attack_speed");
-        double attackSpeedScaling      = GsonHelper.getAsDouble(json, "attack_speed_scaling");
-        double physicalPower           = GsonHelper.getAsDouble(json, "physical_power");
-        double physicalPowerScaling    = GsonHelper.getAsDouble(json, "physical_power_scaling");
-        double magicPower            = GsonHelper.getAsDouble(json, "magic_power");
-        double magicPowerScaling     = GsonHelper.getAsDouble(json, "magic_power_scaling");
-        double maxHealth               = GsonHelper.getAsDouble(json, "max_health");
-        double maxHealthScaling        = GsonHelper.getAsDouble(json, "max_health_scaling");
-        double healthRegen             = GsonHelper.getAsDouble(json, "health_regeneration");
-        double healthRegenScaling      = GsonHelper.getAsDouble(json, "health_regeneration_scaling");
-        double armor                   = GsonHelper.getAsDouble(json, "armor");
-        double armorScaling            = GsonHelper.getAsDouble(json, "armor_scaling");
-        double magicResist             = GsonHelper.getAsDouble(json, "magic_resist");
-        double magicResistScaling      = GsonHelper.getAsDouble(json, "magic_resist_scaling");
-        double movementSpeed           = GsonHelper.getAsDouble(json, "movement_speed");
-        double movementSpeedScaling    = GsonHelper.getAsDouble(json, "movement_speed_scaling");
-        double experience          = GsonHelper.getAsDouble(json, "experience");
-        double experienceScaling       = GsonHelper.getAsDouble(json, "experience_scaling");
+        double attackDamage = GsonHelper.getAsDouble(json, "attack_damage");
+        double attackDamageScaling = GsonHelper.getAsDouble(json, "attack_damage_scaling");
+        double attackSpeed = GsonHelper.getAsDouble(json, "attack_speed");
+        double attackSpeedScaling = GsonHelper.getAsDouble(json, "attack_speed_scaling");
+        double physicalPower = GsonHelper.getAsDouble(json, "physical_power");
+        double physicalPowerScaling = GsonHelper.getAsDouble(json, "physical_power_scaling");
+        double magicPower = GsonHelper.getAsDouble(json, "magic_power");
+        double magicPowerScaling = GsonHelper.getAsDouble(json, "magic_power_scaling");
+        double maxHealth = GsonHelper.getAsDouble(json, "max_health");
+        double maxHealthScaling = GsonHelper.getAsDouble(json, "max_health_scaling");
+        double healthRegen = GsonHelper.getAsDouble(json, "health_regeneration");
+        double healthRegenScaling = GsonHelper.getAsDouble(json, "health_regeneration_scaling");
+        double armor = GsonHelper.getAsDouble(json, "armor");
+        double armorScaling = GsonHelper.getAsDouble(json, "armor_scaling");
+        double magicResist = GsonHelper.getAsDouble(json, "magic_resist");
+        double magicResistScaling = GsonHelper.getAsDouble(json, "magic_resist_scaling");
+        double movementSpeed = GsonHelper.getAsDouble(json, "movement_speed");
+        double movementSpeedScaling = GsonHelper.getAsDouble(json, "movement_speed_scaling");
+        double experience = GsonHelper.getAsDouble(json, "experience");
+        double experienceScaling = GsonHelper.getAsDouble(json, "experience_scaling");
 
         // For traits, you might store them as a simple array of strings in the legacy format.
         List<String> entityTraits = new ArrayList<>();
