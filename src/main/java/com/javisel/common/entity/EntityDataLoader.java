@@ -115,7 +115,6 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
 
     /**
      * Fallback utility method to parse top-level JSON fields from older data that doesn't match the nested codec structure.
-     * Adjust field lookups, defaults, or error handling as needed.
      *
      * @param json The JsonObject with legacy fields
      * @return A new EntityStatisticalData constructed from legacy fields
