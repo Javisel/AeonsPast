@@ -30,8 +30,15 @@ public class ModBusEventHandler {
                 event.add(entity, entry.getDelegate());
 
 
+
             }
         }
 
     }
+
+
+
+
+
+
 }

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:falling_stalacite",
+    "minecraft:stalagmite",
+    "minecraft:sweet_berry_bush",
+    "minecraft:sting",
+    "minecraft:thorns",
+    "minecraft:trident"
+  ]
+}

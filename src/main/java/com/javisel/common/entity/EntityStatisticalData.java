@@ -1,7 +1,16 @@
 package com.javisel.common.entity;
 
+import com.javisel.AeonsPast;
+import com.javisel.common.registration.AttributeRegistration;
+import com.javisel.common.registration.DataAttachmentRegistration;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,51 +49,6 @@ public record EntityStatisticalData(
             ).apply(instance, EntityStatisticalData::new)
     );
 
-//    public void loadtoEntity(LivingEntity entity) {
-//        if (entity.getAttribute(AttributeRegistration.WEAPON_POWER.get()).getModifier(BASE_STAT_ID) != null) {
-//            return;
-//        }
-//
-//        addAttributeToEntity(entity, AttributeRegistration.WEAPON_POWER.get(), attack_damage, attack_damage_scaling);
-//        addAttributeToEntity(entity, Attributes.ATTACK_SPEED, 4 - attack_speed, 4 - attack_speed_scaling);
-//        addAttributeToEntity(entity, AttributeRegistration.PHYSICAL_POWER.get(), physical_power, physical_power_scaling);
-//        addAttributeToEntity(entity, AttributeRegistration.MAGICAL_POWER.get(), magical_power, magical_power_scaling);
-//
-//        addAttributeToEntity(entity, Attributes.MAX_HEALTH, max_health, max_health_scaling);
-//
-//        entity.heal(entity.getMaxHealth());
-//        addAttributeToEntity(entity, AttributeRegistration.HEALTH_REGENERATION.get(), health_regeneration, health_regeneration);
-//        addAttributeToEntity(entity, AttributeRegistration.ARMOR.get(), armor, armor_scaling);
-//        addAttributeToEntity(entity, AttributeRegistration.MAGIC_RESISTANCE.get(), magic_resist, magic_resist_scaling);
-//        addAttributeToEntity(entity, Attributes.MOVEMENT_SPEED, movement_speed, movement_speed_scaling);
-//        addAttributeToEntity(entity, AttributeRegistration.EXPERIENCE.get(), base_experience, experience_scaling);
-//
-//        IMobData mobData = Utilities.getMobData((Mob) entity);
-//
-//        IEntityData entityData = Utilities.getEntityData(entity);
-//        for (String key : entity_traits) {
-//            EntityTrait trait = EntityTrait.getTraitByLocation(new ResourceLocation(key));
-//            mobData.getEntityTraits().add(trait);
-//        }
-//
-//        mobData.setExperienceReward((float) (base_experience + (experience_scaling * (1 - entityData.getLevel()))));
-//    }
-//
-//    public void addAttributeToEntity(LivingEntity entity, Attribute attribute, double baseValue, double scaleValue) {
-//        double appliedBase = baseValue;
-//        double appliedScale = scaleValue;
-//        if (entity instanceof Slime slime) {
-//            appliedBase = baseValue * ((double) slime.getSize());
-//            appliedScale = scaleValue * ((double) slime.getSize());
-//        }
-//
-//        entity.getAttribute(attribute).addPermanentModifier(new AttributeModifier(BASE_STAT_ID, BASE_STRING, appliedBase, AttributeModifier.Operation.ADDITION));
-//
-//        int level = Utilities.getEntityData(entity).getLevel();
-//        if (level != 1) {
-//            entity.getAttribute(attribute).addPermanentModifier(new AttributeModifier(LEVEL_STAT_ID, LEVEL_STRING, appliedScale * (level - 1), AttributeModifier.Operation.ADDITION));
-//        }
-//    }
 
     public record DefenseStats(
             double max_health,
@@ -93,8 +57,9 @@ public record EntityStatisticalData(
             double health_regeneration_scaling,
             double armor,
             double armor_scaling,
-            double magic_resist,
-            double magic_resist_scaling
+            List<String> resistances,
+            List<String> immunities,
+            List<String> vulnerabilities
     ) {
         public static final Codec<DefenseStats> CODEC = RecordCodecBuilder.create(instance ->
                 instance.group(
@@ -110,10 +75,12 @@ public record EntityStatisticalData(
                                 .forGetter(DefenseStats::armor),
                         Codec.DOUBLE.fieldOf("armor_scaling")
                                 .forGetter(DefenseStats::armor_scaling),
-                        Codec.DOUBLE.fieldOf("magic_resist")
-                                .forGetter(DefenseStats::magic_resist),
-                        Codec.DOUBLE.fieldOf("magic_resist_scaling")
-                                .forGetter(DefenseStats::magic_resist_scaling)
+                        Codec.STRING.listOf().fieldOf("resistances")
+                                .forGetter(DefenseStats::resistances),
+                        Codec.STRING.listOf().fieldOf("immunities")
+                                .forGetter(DefenseStats::immunities),
+                        Codec.STRING.listOf().fieldOf("vulnerabilities")
+                                .forGetter(DefenseStats::vulnerabilities)
                 ).apply(instance, DefenseStats::new)
         );
     }
@@ -149,4 +116,100 @@ public record EntityStatisticalData(
                 ).apply(instance, OffenseStats::new)
         );
     }
+
+    public void loadtoEntity(LivingEntity entity, int levelIn) {
+
+
+
+        entity.getAttribute(AttributeRegistration.NPC_LEVEL).addPermanentModifier(new AttributeModifier(ResourceLocation.fromNamespaceAndPath(AeonsPast.MODID,"base_stat"), levelIn, AttributeModifier.Operation.ADD_VALUE));
+
+        addAttributeToEntity(entity, Attributes.ATTACK_DAMAGE, offenseStats().attack_damage, offenseStats().attack_damage_scaling);
+        addAttributeToEntity(entity, Attributes.ATTACK_SPEED, -4 + offenseStats().attack_speed, -4+ offenseStats().attack_speed_scaling());
+
+        addAttributeToEntity(entity, Attributes.MAX_HEALTH, -20 + defenseStats().max_health, defenseStats().max_health_scaling);
+
+        entity.heal(entity.getMaxHealth());
+        addAttributeToEntity(entity, AttributeRegistration.HEALTH_REGENERATION, defenseStats().health_regeneration, defenseStats().health_regeneration_scaling);
+        addAttributeToEntity(entity, Attributes.ARMOR,  defenseStats().armor, defenseStats().armor_scaling);
+
+        addAttributeToEntity(entity, Attributes.MOVEMENT_SPEED, movement_speed, movement_speed_scaling);
+        addAttributeToEntity(entity, AttributeRegistration.NPC_EXPERIENCE, experience, experience_scaling);
+
+        StringBuilder vulnerabilitiesbuilder = new StringBuilder();
+
+
+        for (String string : defenseStats.vulnerabilities) {
+
+            vulnerabilitiesbuilder.append(",").append(string);
+
+
+        }
+
+        String vulnerabilties = vulnerabilitiesbuilder.toString();
+        if (vulnerabilties.length()>1) {
+            vulnerabilties = vulnerabilties.substring(1);
+
+            entity.setData(DataAttachmentRegistration.VULNERABILITIES, vulnerabilties);
+
+            System.out.println("Vulnerabilities: " + vulnerabilties);
+
+        }
+        StringBuilder resistancesb = new StringBuilder();
+
+
+        for (String string : defenseStats.resistances) {
+
+            resistancesb.append(",").append(string);
+
+
+        }
+
+        String resistances = resistancesb.toString();
+        if (resistances.length() > 1) {
+            resistances = resistances.substring(1);
+
+            entity.setData(DataAttachmentRegistration.RESISTANCES, resistances);
+
+            System.out.println("Resistances: " + resistances);
+
+        }
+        StringBuilder immunitiesb = new StringBuilder();
+
+
+        for (String string : defenseStats.immunities) {
+
+            immunitiesb.append(",").append(string);
+
+
+        }
+
+
+        String immunities = immunitiesb.toString();
+        if (immunities.length() > 1) {
+            immunities = immunities.substring(1);
+
+            entity.setData(DataAttachmentRegistration.IMMUNITIES, immunities);
+
+            System.out.println("immunities: " + immunities);
+        }
+
+
+
+
+    }
+
+   public void addAttributeToEntity(LivingEntity entity, Holder<Attribute> attribute, double baseValue, double scaleValue) {
+        double appliedBase = baseValue;
+        double appliedScale = scaleValue;
+        double scalar = -1 + entity.getAttributeValue(AttributeRegistration.NPC_LEVEL.getDelegate());
+        appliedBase+=(appliedScale * scalar);
+
+        entity.getAttribute(attribute).addPermanentModifier(new AttributeModifier(ResourceLocation.fromNamespaceAndPath(AeonsPast.MODID,"base_stat"), appliedBase, AttributeModifier.Operation.ADD_VALUE));
+
+
+   }
+
+
+
+
 }

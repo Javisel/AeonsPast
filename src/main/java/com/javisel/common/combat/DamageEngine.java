@@ -23,20 +23,6 @@ public class DamageEngine {
 
 
 
-    static {
-
-
-
-
-
-
-
-
-
-
-
-    }
-
 
 
 

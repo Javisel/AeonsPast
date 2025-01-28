@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:falling_anvil",
+    "minecraft:falling_block",
+    "minecraft:mace_smash",
+    "minecraft:spit",
+    "minecraft:sonic_boom"
+  ]
+}

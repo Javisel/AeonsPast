@@ -3,6 +3,7 @@ package com.javisel;
 import com.javisel.common.entity.EntityDataLoader;
 import com.javisel.common.particles.WorldTextParticleOptions;
 import com.javisel.common.registration.AttributeRegistration;
+import com.javisel.common.registration.DataAttachmentRegistration;
 import com.javisel.common.registration.ParticleTypeRegistration;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -88,6 +89,7 @@ public class AeonsPast
         ITEMS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
+        DataAttachmentRegistration.ATTACHMENT_TYPES.register(modEventBus);
         AttributeRegistration.ATTRIBUTES.register(modEventBus);
         ParticleTypeRegistration.PARTICLE_TYPES.register(modEventBus);
         // Register ourselves for server and other game events we are interested in.

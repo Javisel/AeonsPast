@@ -14,14 +14,15 @@
     "attack_speed_scaling": 0.015
   },
   "defense_stats": {
-    "armor": 6.0,
-    "armor_scaling": 0.39,
-    "magic_resist": 3.35,
-    "magic_resist_scaling": 0.15,
-    "max_health": 100.0,
-    "max_health_scaling": 15.0,
+    "armor": 15.0,
+    "armor_scaling": 1.5,
+    "max_health": 20.0,
+    "max_health_scaling": 2.0,
     "health_regeneration": 0.0,
-    "health_regeneration_scaling": 0.0
+    "health_regeneration_scaling": 0.0,
+    "resistances": [],
+    "vulnerabilities": ["aeonspast:radiant"],
+    "immunities": ["aeonspast:poison"]
   },
   "movement_speed": 0.0
 }

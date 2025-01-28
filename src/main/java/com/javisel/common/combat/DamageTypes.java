@@ -20,6 +20,8 @@ public enum DamageTypes {
   WITHER("aeonspast:wither", 11, null, 0x301934),
   KINETIC("aeonspast:kinetic", 12, null, 0xFFFFFF),
   BLEED("aeonspast:bleed", 13, null, 0x660000),
+  BLAST("aeonspast:blast", 13, null, 0x660000),
+
   TRUE("aeonspast:true", 14, null, 0xFFFFFF);
 
   private final String unlocalizedName;

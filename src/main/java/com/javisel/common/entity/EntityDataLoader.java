@@ -35,6 +35,7 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
 
         HashSet<ResourceLocation> finalLocations = new HashSet<>();
 
+
         try {
             for (Resource resource : resourceManager.getResourceStack(resourceLocation)) {
                 InputStream stream = resource.open();
@@ -136,8 +137,6 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
         double healthRegenScaling = GsonHelper.getAsDouble(json, "health_regeneration_scaling");
         double armor = GsonHelper.getAsDouble(json, "armor");
         double armorScaling = GsonHelper.getAsDouble(json, "armor_scaling");
-        double magicResist = GsonHelper.getAsDouble(json, "magic_resist");
-        double magicResistScaling = GsonHelper.getAsDouble(json, "magic_resist_scaling");
         double movementSpeed = GsonHelper.getAsDouble(json, "movement_speed");
         double movementSpeedScaling = GsonHelper.getAsDouble(json, "movement_speed_scaling");
         double experience = GsonHelper.getAsDouble(json, "experience");
@@ -147,6 +146,25 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
         List<String> entityTraits = new ArrayList<>();
         if (json.has("entity_traits") && json.get("entity_traits").isJsonArray()) {
             for (JsonElement element : json.getAsJsonArray("entity_traits")) {
+                entityTraits.add(element.getAsString());
+            }
+        }
+
+        List<String> vulnerabilties = new ArrayList<>();
+        if (json.has("vulnerabilties") && json.get("vulnerabilties").isJsonArray()) {
+            for (JsonElement element : json.getAsJsonArray("vulnerabilties")) {
+                entityTraits.add(element.getAsString());
+            }
+        }
+        List<String> resistances = new ArrayList<>();
+        if (json.has("resistances") && json.get("resistances").isJsonArray()) {
+            for (JsonElement element : json.getAsJsonArray("resistances")) {
+                entityTraits.add(element.getAsString());
+            }
+        }
+        List<String> immunities = new ArrayList<>();
+        if (json.has("immunities") && json.get("immunities").isJsonArray()) {
+            for (JsonElement element : json.getAsJsonArray("immunities")) {
                 entityTraits.add(element.getAsString());
             }
         }
@@ -170,8 +188,9 @@ public class EntityDataLoader extends SimplePreparableReloadListener<Map<Resourc
                         healthRegenScaling,
                         armor,
                         armorScaling,
-                        magicResist,
-                        magicResistScaling
+                        vulnerabilties,
+                        resistances,
+                        immunities
                 ),
                 movementSpeed,
                 movementSpeedScaling,
