@@ -8,6 +8,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
+import net.neoforged.neoforge.event.entity.item.ItemEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public class ModBusEventHandler {
 
 
             event.add(entity, Attributes.ATTACK_SPEED);
+            event.add(entity, Attributes.LUCK);
+
             for (DeferredHolder<Attribute, ? extends Attribute> entry : AttributeRegistration.ATTRIBUTES.getEntries()) {
                 event.add(entity, entry.getDelegate());
 
@@ -35,6 +38,7 @@ public class ModBusEventHandler {
         }
 
     }
+
 
 
 

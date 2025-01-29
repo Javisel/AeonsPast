@@ -1,49 +1,12 @@
 {
-  "weapon_type": "SWORD",
-  "rarity": "RARE",
-  "attack_damage": {
-    "min": 12.5,
-    "max": 47.5
-  },
-  "attack_speed": {
-    "min": 1.5,
-    "max": 2.2
-  },
-  "critical_chance": {
-    "min": 0,
-    "max": 0
-  },
-  "critical_damage": {
-    "min": 2,
-    "max": 2
-  },
-  "durability": {
-    "min": 1093,
-    "max": 2029
-  },
-  "status_chance": {
-    "min": 20,
-    "max": 40
-  },
-  "enchantability": {
-    "min": 10,
-    "max": 10
-  },
-  "range": {
-    "min": 4,
-    "max": 4
-  },
-  "is_ranged": "false",
-  "secondarydata": [],
-  "properties": [
-    "aeonspast:versatile",
-    "aeonspast:sweeping",
-    "aeonspast:kinetic",
-    "aeonspast:brutal"
-  ],
-  "spells": [
-    "aeonspast:true_strike",
-    "aeonspast:double_slash",
-    "aeonspast:cleave"
-  ]
+  "item_type": "SWORD",
+  "attack_power": 7.0,
+  "attack_speed": 1.6,
+  "range": 4,
+  "critical_chance": 25,
+  "critical_damage": 1.65,
+  "status_chance": 40,
+  "durability": 2375,
+  "damage_type": "aeonspast:slash",
+  "isRanged": false
 }

@@ -75,6 +75,20 @@ public enum DamageTypes {
     return statusEffect.get();
   }
 
+  public static DamageTypes getByString(String key) {
+
+    for (DamageTypes type : DamageTypes.values()) {
+
+    if (type.unlocalizedName.equals(key)) {
+
+      return type;
+      }
+
+    }
+
+
+    return null;
+  }
 
 
 

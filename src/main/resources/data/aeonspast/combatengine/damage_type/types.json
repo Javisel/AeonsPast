@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "aeonspast:heat",
+    "aeonspast:puncture",
+    "aeonspast:arcane",
+    "aeonspast:blast",
+    "aeonspast:cold",
+    "aeonspast:electric",
+    "aeonspast:ender",
+    "aeonspast:impact",
+    "aeonspast:wither",
+    "aeonspast:kinetic"
+  ]
+}

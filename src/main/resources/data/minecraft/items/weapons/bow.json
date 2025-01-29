@@ -1,45 +1,12 @@
 {
-  "weapon_type": "BOW",
-  "rarity": "COMMON",
-  "attack_damage": {
-    "min": 5,
-    "max": 50
-  },
-  "attack_speed": {
-    "min": 1,
-    "max": 1
-  },
-  "critical_chance": {
-    "min": 9,
-    "max": 19
-  },
-  "critical_damage": {
-    "min": 2.15,
-    "max": 2.15
-  },
-  "durability": {
-    "min": 1248,
-    "max": 1873
-  },
-  "status_chance": {
-    "min": 20,
-    "max": 40
-  },
-  "enchantability": {
-    "min": 15,
-    "max": 15
-  },
-  "range": {
-    "min": 4,
-    "max": 4
-  },
-  "is_ranged": "true",
-  "secondarydata": [],
-  "properties": [
-  ],
-  "spells": [
-    "aeonspast:arrow_storm",
-    "aeonspast:vengeful_assault",
-    "aeonspast:true_strike"
-  ]
+  "item_type": "BOW",
+  "attack_power": 7.0,
+  "attack_speed": 1.6,
+  "range": 50,
+  "critical_chance": 25,
+  "critical_damage": 1.65,
+  "status_chance": 40,
+  "durability": 2375,
+  "damage_type": "aeonspast:impact",
+  "isRanged": true
 }

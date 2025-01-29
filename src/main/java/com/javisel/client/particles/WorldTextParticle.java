@@ -40,7 +40,7 @@ public class WorldTextParticle extends Particle {
         this.hasPhysics = false;
         this.gravity = 0;
         lifetime = 20;
-        System.out.println("New particle made!");
+
     }
 
     @Override

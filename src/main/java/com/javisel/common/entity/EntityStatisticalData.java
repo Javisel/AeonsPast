@@ -151,7 +151,7 @@ public record EntityStatisticalData(
 
             entity.setData(DataAttachmentRegistration.VULNERABILITIES, vulnerabilties);
 
-            System.out.println("Vulnerabilities: " + vulnerabilties);
+
 
         }
         StringBuilder resistancesb = new StringBuilder();
@@ -170,7 +170,7 @@ public record EntityStatisticalData(
 
             entity.setData(DataAttachmentRegistration.RESISTANCES, resistances);
 
-            System.out.println("Resistances: " + resistances);
+
 
         }
         StringBuilder immunitiesb = new StringBuilder();
@@ -190,7 +190,6 @@ public record EntityStatisticalData(
 
             entity.setData(DataAttachmentRegistration.IMMUNITIES, immunities);
 
-            System.out.println("immunities: " + immunities);
         }
 
 

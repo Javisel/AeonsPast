@@ -25,10 +25,11 @@ public class DamageTypeParticle extends TextureSheetParticle {
     @Override
     public void tick() {
         // Set the sprite for the current particle age, i.e. advance the animation.
+        super.tick();
         this.setSpriteFromAge(spriteSet);
         // Let super handle further movement. You may replace this with your own movement if needed.
         // You may also override move() if you only want to modify the built-in movement.
-        super.tick();
+
     }
 
     @Override

@@ -6,8 +6,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import net.neoforged.neoforge.registries.RegistryBuilder;
 
 public class AttributeRegistration {
 
@@ -23,6 +21,9 @@ public class AttributeRegistration {
     public static final DeferredHolder<Attribute, Attribute> CHARISMA = ATTRIBUTES.register("charisma", () -> new RangedAttribute("generic.charisma", 0, 0, Double.MAX_VALUE).setSyncable(true));
 
     //Secondary Attributes
+    public static final DeferredHolder<Attribute, Attribute> MELEE_POWER = ATTRIBUTES.register("melee_power", () -> new RangedAttribute("generic.melee_power", 0, 0, Double.MAX_VALUE).setSyncable(true));
+    public static final DeferredHolder<Attribute, Attribute> RANGED_POWER = ATTRIBUTES.register("ranged_power", () -> new RangedAttribute("generic.ranged_power", 0, 0, Double.MAX_VALUE).setSyncable(true));
+
     public static final DeferredHolder<Attribute, Attribute> HEALTH_REGENERATION = ATTRIBUTES.register("health_regeneration", () -> new RangedAttribute("generic.health_regeneration", 0, 0, Double.MAX_VALUE).setSyncable(true));
     public static final DeferredHolder<Attribute, Attribute> CRITICAL_CHANCE = ATTRIBUTES.register("critical_chance", () -> new RangedAttribute("generic.critical_chance", 0, 0, Double.MAX_VALUE).setSyncable(true));
     public static final DeferredHolder<Attribute, Attribute> CRITICAL_DAMAGE = ATTRIBUTES.register("critical_damage", () -> new RangedAttribute("generic.critical_damage", 0, 0, Double.MAX_VALUE).setSyncable(true));

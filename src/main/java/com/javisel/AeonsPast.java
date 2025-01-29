@@ -1,15 +1,13 @@
 package com.javisel;
 
+import com.javisel.common.combat.DamageTypeDataLoader;
 import com.javisel.common.entity.EntityDataLoader;
-import com.javisel.common.particles.WorldTextParticleOptions;
+import com.javisel.common.item.WeaponDataLoader;
 import com.javisel.common.registration.AttributeRegistration;
 import com.javisel.common.registration.DataAttachmentRegistration;
+import com.javisel.common.registration.DataComponentsRegistration;
 import com.javisel.common.registration.ParticleTypeRegistration;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -36,9 +34,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -92,6 +88,7 @@ public class AeonsPast
         DataAttachmentRegistration.ATTACHMENT_TYPES.register(modEventBus);
         AttributeRegistration.ATTRIBUTES.register(modEventBus);
         ParticleTypeRegistration.PARTICLE_TYPES.register(modEventBus);
+        DataComponentsRegistration.REGISTRAR.register(modEventBus);
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (AeonsPast) to respond directly to events.
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
@@ -130,6 +127,8 @@ public class AeonsPast
         @SubscribeEvent
         public static void onAddReloadListener(AddReloadListenerEvent event) {
             event.addListener(new EntityDataLoader());
+            event.addListener(new WeaponDataLoader());
+            event.addListener(new DamageTypeDataLoader());
         }
     }
 
