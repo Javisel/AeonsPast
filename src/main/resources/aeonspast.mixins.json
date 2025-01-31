@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.javisel.aeonspast.common.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "aeonspast.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "minVersion": "0.8"
+}

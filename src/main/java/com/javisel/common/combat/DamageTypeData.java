@@ -10,7 +10,6 @@ public record DamageTypeData(
         List<String> damage_types
 
 ) {
-   ;
 
     // Codec definition for serialization/deserialization
     public static final Codec<DamageTypeData> CODEC = RecordCodecBuilder.create(instance ->

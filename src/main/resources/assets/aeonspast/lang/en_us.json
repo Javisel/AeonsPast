@@ -1,10 +1,11 @@
 {
-  "itemGroup.aeonspast": "Example Mod Tab",
+  "itemGroup.aeonspast": "Aeon's Past Tab",
   "block.aeonspast.example_block": "Example Block",
   "item.aeonspast.example_item": "Example Item",
   "generic.critical_damage": "Critical Damage",
   "generic.critical_chance": "Critical Chance",
   "generic.status_chance": "Status Chance",
   "generic.melee_power": "Melee Power",
-  "generic.ranged_power": "Ranged Power"
+  "generic.ranged_power": "Ranged Power",
+  "generic.weapon_power": "Weapon Power"
 }

@@ -1,4 +1,4 @@
-package com.javisel.common.item;
+package com.javisel.common.entity.projectile;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
@@ -11,7 +11,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.loading.FMLPaths;
 
 import java.io.BufferedReader;
@@ -23,16 +22,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-public class WeaponDataLoader extends SimplePreparableReloadListener<Map<ResourceLocation, WeaponStatisticalData>> {
-    public static final Map<ResourceLocation, WeaponStatisticalData> WEAPON_STATISTICAL_DATA = new HashMap<>();
+public class ProjectileDataLoader extends SimplePreparableReloadListener<Map<ResourceLocation, ProjectileStatisticalData>> {
+    public static final Map<ResourceLocation, ProjectileStatisticalData> PROJECTILE_STATISTICAL_DATA = new HashMap<>();
     private static final Gson GSON_INSTANCE = new GsonBuilder().setPrettyPrinting().create();
-    private static final String folder = "items/weapons";
+    private static final String folder = "entities/projectiles";
 
     @Override
-    protected Map<ResourceLocation, WeaponStatisticalData> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        ImmutableMap.Builder<ResourceLocation, WeaponStatisticalData> builder = ImmutableMap.builder();
+    protected Map<ResourceLocation, ProjectileStatisticalData> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+        ImmutableMap.Builder<ResourceLocation, ProjectileStatisticalData> builder = ImmutableMap.builder();
 
-        ResourceLocation resourceLocation = ResourceLocation.tryBuild(AeonsPast.MODID, "tags/items/weapons/weapons.json");
+        ResourceLocation resourceLocation = ResourceLocation.tryBuild(AeonsPast.MODID, "tags/entity_types/projectiles.json");
 
         HashSet<ResourceLocation> finalLocations = new HashSet<>();
 
@@ -56,6 +55,7 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
                         ResourceLocation res = ResourceLocation.tryParse(loc);
                         finalLocations.add(res);
 
+                        System.out.println("Res: " + res.toString());
                     }
                 }
 
@@ -71,7 +71,7 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
                                 return null;
                             }
                         }).orElse(null);
-                        WeaponStatisticalData stats = getItemProperties(location, jsonElement);
+                        ProjectileStatisticalData stats = getItemProperties(location, jsonElement);
                         if (stats != null) {
                             builder.put(location, stats);
                         }
@@ -88,9 +88,9 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, WeaponStatisticalData> ItemStatisticsMap, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        WEAPON_STATISTICAL_DATA.clear();
-        WEAPON_STATISTICAL_DATA.putAll(ItemStatisticsMap);
+    protected void apply(Map<ResourceLocation, ProjectileStatisticalData> ItemStatisticsMap, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+        PROJECTILE_STATISTICAL_DATA.clear();
+        PROJECTILE_STATISTICAL_DATA.putAll(ItemStatisticsMap);
     }
 
     /**
@@ -102,15 +102,15 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
      * @param jsonElement The JSON Element containing Item data
      * @return An ItemStatisticalData object or null if invalid JSON
      */
-    private WeaponStatisticalData getItemProperties(ResourceLocation location, JsonElement jsonElement) {
+    private ProjectileStatisticalData getItemProperties(ResourceLocation location, JsonElement jsonElement) {
         if (jsonElement == null || !jsonElement.isJsonObject()) {
             return null;
         }
         JsonObject json = jsonElement.getAsJsonObject();
 
         // Try parsing with the new codec
-        DataResult<WeaponStatisticalData> result =
-                WeaponStatisticalData.CODEC.parse(JsonOps.INSTANCE, json);
+        DataResult<ProjectileStatisticalData> result =
+                ProjectileStatisticalData.CODEC.parse(JsonOps.INSTANCE, json);
 
         // If parsing was successful, return the parsed data
         return result.result().orElseGet(() -> parseLegacyJson(location, json));
@@ -122,32 +122,18 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
      * @param json The JsonObject with legacy fields
      * @return A new ItemStatisticalData constructed from legacy fields
      */
-    private WeaponStatisticalData parseLegacyJson(ResourceLocation location, JsonObject json) {
+    private ProjectileStatisticalData parseLegacyJson(ResourceLocation location, JsonObject json) {
         AeonsPast.LOGGER.warn("Falling back to legacy JSON parsing for Item {}", location);
-        String itemType = GsonHelper.getAsString(json,"item_type");
-        double attackPower = GsonHelper.getAsDouble(json, "attack_power");
-        double attackSpeed = GsonHelper.getAsDouble(json, "attack_speed");
-        double range = GsonHelper.getAsDouble(json, "range");
-        double critical_chance = GsonHelper.getAsDouble(json, "critical_chance");
-        double critical_damage = GsonHelper.getAsDouble(json, "critical_damage");
-        double status_chance = GsonHelper.getAsDouble(json, "status_chance");
-        double durability = GsonHelper.getAsDouble(json, "durability");
-        String damageType = GsonHelper.getAsString(json,"damage_type");
-        String attack_type = GsonHelper.getAsString(json,"attack_type");
+        Boolean override = GsonHelper.getAsBoolean(json,"override");
+        String damagetype = GsonHelper.getAsString(json,"damage_type");
+        Double damage = GsonHelper.getAsDouble(json,"damage_type");
 
 
         // Construct and return the new object
-        var object = new WeaponStatisticalData(
-                    itemType,
-                    attackPower,
-                        attackSpeed,
-                        range,
-                        critical_chance,
-                        critical_damage,
-                        status_chance,
-                        durability,
-                damageType,
-                attack_type
+        var object = new ProjectileStatisticalData(
+                override,
+                damage,
+                damagetype
 
         );
 
@@ -160,7 +146,7 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
             ItemDataPath.toFile().mkdirs();
         }
 
-        WeaponStatisticalData.CODEC.encodeStart(JsonOps.INSTANCE, object).result().ifPresent(result -> {
+        ProjectileStatisticalData.CODEC.encodeStart(JsonOps.INSTANCE, object).result().ifPresent(result -> {
             try {
                 String data = GSON_INSTANCE.toJson(result);
                 Files.writeString(ItemPath, data);
@@ -172,23 +158,4 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
 
         return object;
     }
-
-    public static WeaponStatisticalData getByItemStack(ItemStack stack) {
-
-        ResourceLocation location = ResourceLocation.bySeparator(stack.getItemHolder().getRegisteredName(),':');
-
-
-        return WEAPON_STATISTICAL_DATA.get(location);
-
-
-
-    }
-
-
-
-
-
-
-
-
 }

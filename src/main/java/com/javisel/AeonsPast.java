@@ -2,6 +2,7 @@ package com.javisel;
 
 import com.javisel.common.combat.DamageTypeDataLoader;
 import com.javisel.common.entity.EntityDataLoader;
+import com.javisel.common.entity.projectile.ProjectileDataLoader;
 import com.javisel.common.item.WeaponDataLoader;
 import com.javisel.common.registration.AttributeRegistration;
 import com.javisel.common.registration.DataAttachmentRegistration;
@@ -65,7 +66,7 @@ public class AeonsPast
             .alwaysEdible().nutrition(1).saturationModifier(2f).build()));
 
     // Creates a creative tab with the id "aeonspast:example_tab" for the example item, that is placed after the combat tab
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("creativetab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.aeonspast")) //The language key for the title of your CreativeModeTab
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
@@ -129,6 +130,7 @@ public class AeonsPast
             event.addListener(new EntityDataLoader());
             event.addListener(new WeaponDataLoader());
             event.addListener(new DamageTypeDataLoader());
+            event.addListener(new ProjectileDataLoader());
         }
     }
 

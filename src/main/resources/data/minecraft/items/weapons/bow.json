@@ -1,12 +1,12 @@
 {
   "item_type": "BOW",
-  "attack_power": 7.0,
-  "attack_speed": 1.6,
+  "attack_power": 11.0,
+  "attack_speed": 0.90,
   "range": 50,
   "critical_chance": 25,
-  "critical_damage": 1.65,
+  "critical_damage": 1.5,
   "status_chance": 40,
   "durability": 2375,
   "damage_type": "aeonspast:impact",
-  "isRanged": true
+  "attack_type": "ranged"
 }

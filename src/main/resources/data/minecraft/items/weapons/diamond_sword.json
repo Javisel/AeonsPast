@@ -8,5 +8,5 @@
   "status_chance": 40,
   "durability": 2375,
   "damage_type": "aeonspast:slash",
-  "isRanged": false
+  "attack_type": "melee"
 }

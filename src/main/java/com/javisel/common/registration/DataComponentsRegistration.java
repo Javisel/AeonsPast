@@ -1,15 +1,18 @@
 package com.javisel.common.registration;
 
 import com.javisel.AeonsPast;
+import com.javisel.common.entity.projectile.ProjectileData;
 import com.javisel.common.item.WeaponData;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
 import static com.javisel.common.item.WeaponData.BASIC_CODEC;
 import static com.javisel.common.item.WeaponData.BASIC_STREAM_CODEC;
+import static com.javisel.common.registration.DataAttachmentRegistration.ATTACHMENT_TYPES;
 
 public class DataComponentsRegistration {
 
@@ -24,7 +27,6 @@ public class DataComponentsRegistration {
                     // The codec to read/write the data across the network
                     .networkSynchronized(BASIC_STREAM_CODEC)
     );
-
 
 
 

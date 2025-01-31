@@ -29,13 +29,9 @@ public record WeaponStatisticalData(
         double status_chance,
         double durability,
         String damageType,
-        boolean isRanged
+        String attack_type
 
 ) {
-    public static final UUID BASE_STAT_ID = UUID.fromString("c05b0654-01f1-43a4-a3a5-47b6fc08a479");
-    public static final UUID LEVEL_STAT_ID = UUID.fromString("f591249f-7637-4fcb-98b7-064722ce3b2a");
-    public static final String BASE_STRING = "base_stats";
-    public static final String LEVEL_STRING = "level_stats";
 
     // Codec definition for serialization/deserialization
     public static final Codec<WeaponStatisticalData> CODEC = RecordCodecBuilder.create(instance ->
@@ -56,7 +52,7 @@ public record WeaponStatisticalData(
                     Codec.DOUBLE.fieldOf("durability")
                             .forGetter(WeaponStatisticalData::durability),
                     Codec.STRING.fieldOf("damage_type").forGetter(WeaponStatisticalData::damageType),
-                    Codec.BOOL.fieldOf("isRanged").forGetter(WeaponStatisticalData::isRanged)
+                    Codec.STRING.fieldOf("attack_type").forGetter(WeaponStatisticalData::attack_type)
 
 
             ).apply(instance, WeaponStatisticalData::new)
@@ -77,12 +73,16 @@ public  void  loadToItem(LivingEntity entity, ItemStack stack) {
 
 stack.set(DataComponents.ATTRIBUTE_MODIFIERS,ItemAttributeModifiers.EMPTY);
 
+
+
+
     stack.update(DataComponents.ATTRIBUTE_MODIFIERS,ItemAttributeModifiers.EMPTY,itemAttributeModifiers -> ItemAttributeModifiers.builder()
-            .add(isRanged ? AttributeRegistration.RANGED_POWER : AttributeRegistration.MELEE_POWER, attackmod, EquipmentSlotGroup.MAINHAND)
+            .add(AttributeRegistration.WEAPON_POWER, attackmod, EquipmentSlotGroup.MAINHAND)
             .add(Attributes.ATTACK_SPEED, attkspdmod, EquipmentSlotGroup.MAINHAND)
             .add(AttributeRegistration.CRITICAL_CHANCE,critchance,EquipmentSlotGroup.MAINHAND)
             .add(AttributeRegistration.CRITICAL_DAMAGE,critdmg,EquipmentSlotGroup.MAINHAND)
             .add(AttributeRegistration.STATUS_CHANCE,statuschance,EquipmentSlotGroup.MAINHAND)
+
 
 
             .build());

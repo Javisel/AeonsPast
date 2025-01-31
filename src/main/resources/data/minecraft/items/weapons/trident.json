@@ -1,0 +1,12 @@
+{
+  "item_type": "TRIDENT",
+  "attack_power": 7.0,
+  "attack_speed": 1.6,
+  "range": 4,
+  "critical_chance": 50,
+  "critical_damage": 2,
+  "status_chance": 40,
+  "durability": 2375,
+  "damage_type": "aeonspast:puncture",
+  "attack_type": "mixed"
+}
