@@ -4,10 +4,7 @@ import com.javisel.common.combat.DamageTypeDataLoader;
 import com.javisel.common.entity.EntityDataLoader;
 import com.javisel.common.entity.projectile.ProjectileDataLoader;
 import com.javisel.common.item.WeaponDataLoader;
-import com.javisel.common.registration.AttributeRegistration;
-import com.javisel.common.registration.DataAttachmentRegistration;
-import com.javisel.common.registration.DataComponentsRegistration;
-import com.javisel.common.registration.ParticleTypeRegistration;
+import com.javisel.common.registration.*;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.slf4j.Logger;
 
@@ -90,6 +87,8 @@ public class AeonsPast
         AttributeRegistration.ATTRIBUTES.register(modEventBus);
         ParticleTypeRegistration.PARTICLE_TYPES.register(modEventBus);
         DataComponentsRegistration.REGISTRAR.register(modEventBus);
+        MobEffectRegistration.MOB_EFFECTS.register(modEventBus);
+        AttachmentTypeRegistration.ATTACHMENT_TYPES.register(modEventBus);
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (AeonsPast) to respond directly to events.
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.

@@ -76,7 +76,6 @@ public class StringKeys {
     public static final String INSTANCE_ID = "instance_id";
     public static final String SOURCE_ID = "source_id";
 
-    public static final String SOURCE = "source";
     public static final String POWER = "power";
     public static final String DURATION = "duration";
     public static final String INITIAL_DURATION = "initial_duration";

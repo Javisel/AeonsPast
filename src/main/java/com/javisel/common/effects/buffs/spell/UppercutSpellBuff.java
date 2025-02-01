@@ -1,8 +1,7 @@
 package com.javisel.common.effects.buffs.spell;
 
-import com.javisel.aeonspast.common.combat.damage.instances.DamageInstance;
-import com.javisel.aeonspast.common.combat.damage.sources.APDamageSource;
-import com.javisel.aeonspast.common.effects.ComplexEffect;
+import com.javisel.common.combat.APDamageSource;
+import com.javisel.common.effects.ComplexEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -12,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 public class UppercutSpellBuff extends ComplexEffect {
 
     public UppercutSpellBuff() {
-        super(MobEffectCategory.BENEFICIAL, 5);
+        super(MobEffectCategory.BENEFICIAL, 0x5);
     }
 
 

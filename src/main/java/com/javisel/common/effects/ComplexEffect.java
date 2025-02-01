@@ -1,8 +1,8 @@
 package com.javisel.common.effects;
 
-import com.javisel.aeonspast.common.capabiltiies.entity.IEntityData;
-import com.javisel.aeonspast.common.combat.damage.sources.APDamageSource;
-import com.javisel.aeonspast.utilities.Utilities;
+import com.javisel.common.attatchments.EntityData;
+import com.javisel.common.registration.AttachmentTypeRegistration;
+import com.javisel.utilities.Utilities;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -27,7 +27,7 @@ public class ComplexEffect extends MobEffect {
     }
 
     @Override
-    public boolean isDurationEffectTick(int p_19455_, int p_19456_) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
@@ -75,7 +75,7 @@ public class ComplexEffect extends MobEffect {
 
     public void addnewComplexInstance(ComplexEffectInstance instance, LivingEntity user) {
 
-        IEntityData entityData = Utilities.getEntityData(user);
+        EntityData entityData = user.getData(AttachmentTypeRegistration.ENTITY_DATA.get());
 
 
         ArrayList<ComplexEffectInstance> instances;
@@ -115,7 +115,7 @@ public class ComplexEffect extends MobEffect {
 
     public void removeComplexInstance(UUID id, LivingEntity user) {
 
-        IEntityData entityData = Utilities.getEntityData(user);
+        EntityData entityData = user.getData(AttachmentTypeRegistration.ENTITY_DATA.get());
 
 
         ArrayList<ComplexEffectInstance> instances;
