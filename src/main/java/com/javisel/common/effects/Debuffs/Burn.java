@@ -1,13 +1,16 @@
 package com.javisel.common.effects.Debuffs;
 
 import com.javisel.common.combat.APDamageSource;
+import com.javisel.common.combat.ComplexDamageTypes;
 import com.javisel.common.effects.ComplexEffect;
 import com.javisel.common.effects.ComplexEffectInstance;
 import com.javisel.common.effects.IDamageStatus;
+import com.javisel.common.registration.AttachmentTypeRegistration;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -39,48 +42,41 @@ public class Burn extends ComplexEffect implements IDamageStatus {
 
             int proc = entity.getRandom().nextInt(4);
 
-            if (proc == 0){
-                return;
-            } else if (proc==1) {
-
-                entity.getMainHandItem().hurt(1,entity.getRandom(), entity instanceof Player ? (ServerPlayer)entity : null   );
-
-            } else if (proc==2) {
-
-                entity.getOffhandItem().hurt(1,entity.getRandom(), entity instanceof Player ? (ServerPlayer)entity : null   );
-
-            } else if (proc==3) {
-
-                for (ItemStack stack : entity.getArmorSlots()) {
-
-                    if (entity.getRandom().nextInt(5) ==1) {
-
-                       stack.hurt(1,entity.getRandom(), entity instanceof Player ? (ServerPlayer)entity : null   );
-                    }
-
+            switch (proc) {
+                case 0 -> {
                 }
+                case 1 -> entity.getMainHandItem().hurtAndBreak(1, entity, EquipmentSlot.MAINHAND);
+                case 2 ->
+                        entity.getOffhandItem().hurt(1, entity.getRandom(), entity instanceof Player ? (ServerPlayer) entity : null);
+                case 3 -> {
 
+                    for (ItemStack stack : entity.getArmorSlots()) {
+
+                        if (entity.getRandom().nextInt(5) == 1) {
+
+                            stack.hurt(1, entity.getRandom(), entity instanceof Player ? (ServerPlayer) entity : null);
+                        }
+                    }
+                }
             }
-
-
         }
     }
 
     @Override
-    public DamageTypeEnum getDamageType() {
-        return DamageTypeEnum.FIRE;
+    public ComplexDamageTypes getDamageType() {
+        return ComplexDamageTypes.FIRE;
     }
 
     @Override
     public ComplexEffectInstance getDefaultDamageInstance(LivingEntity attacker, LivingEntity victim, DamageInstance procInstance) {
 
 
-        double power =  2.5 + .5 * Utilities.getEntityData(attacker).getLevel();
+        double power =  2.5 + .5 * attacker.getData(AttachmentTypeRegistration.ENTITY_DATA.get()).getLevel();
 
 
 
 
-        ComplexEffectInstance instance = new ComplexEffectInstance(UUID.randomUUID(),attacker.getUUID(),power,(20 * 5) +1);
+        ComplexEffectInstance instance = ComplexEffectInstance.of(UUID.randomUUID(),attacker.getUUID(),power,(20 * 5) +1);
 
 
             instance.tickRate=10;

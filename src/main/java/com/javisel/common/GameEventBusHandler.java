@@ -145,21 +145,21 @@ public class GameEventBusHandler {
             MutableComponent mutableComponent = component.copy();
             mutableComponent.append(String.format("%.2f", event.getNewDamage()));
             ServerLevel level = (ServerLevel) victim.level();
-            DamageTypes type = DamageTypeDataLoader.getByVanillaType(source);
+            ComplexDamageTypes type = DamageTypeDataLoader.getByVanillaType(source);
             EntityCombatData combatData= victim.getData(DataAttachmentRegistration.ENTITY_COMBAT_DATA);
             int color;
             if (source.getDirectEntity() == serverPlayer) {
 
                 ItemStack weapon = source.getWeaponItem();
                 if (weapon == ItemStack.EMPTY || source.typeHolder().getRegisteredName().equals("minecraft:player_attack")) {
-                    type = DamageTypes.IMPACT;
+                    type = ComplexDamageTypes.IMPACT;
                 } else {
 
                     WeaponData weaponData = weapon.get(DataComponentsRegistration.WEAPON_DATA);
 
                     if (weaponData != null) {
 
-                        type = DamageTypes.getByString(weaponData.damage_type());
+                        type = ComplexDamageTypes.getByType(weaponData.damage_type());
 
                     }
 
@@ -170,7 +170,7 @@ public class GameEventBusHandler {
 
                     ProjectileData data = projectile.getData(DataAttachmentRegistration.PROJECTILE_DATA);
 
-                    type = DamageTypes.getByString(data.damage_type());
+                    type = ComplexDamageTypes.getByType(data.damage_type());
                 }
             }
 

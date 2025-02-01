@@ -1,12 +1,11 @@
 package com.javisel.common.effects.Debuffs;
 
-import com.javisel.aeonspast.common.combat.damage.instances.DamageInstance;
-import com.javisel.aeonspast.common.combat.DamageTypeEnum;
-import com.javisel.aeonspast.common.effects.ComplexEffectInstance;
-import com.javisel.aeonspast.common.effects.ComplexStatChangeEffect;
-import com.javisel.aeonspast.common.effects.IDamageStatus;
-import com.javisel.aeonspast.common.particles.WorldTextOptions;
-import com.javisel.aeonspast.common.registration.AttributeRegistration;
+import com.javisel.common.combat.ComplexDamageTypes;
+import com.javisel.common.effects.ComplexEffectInstance;
+import com.javisel.common.effects.ComplexStatChangeEffect;
+import com.javisel.common.effects.IDamageStatus;
+import com.javisel.common.particles.WorldTextParticleOptions;
+import com.javisel.common.registration.AttributeRegistration;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -16,37 +15,24 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.UUID;
 
-public class Perforate extends ComplexStatChangeEffect  implements IDamageStatus {
+public class Perforate extends ComplexStatChangeEffect implements IDamageStatus {
 
 
     private static  final UUID PERFORATE_ID = UUID.fromString("ce6b6a54-bdb2-45a3-8a94-1abedcc8000e");
     public Perforate() {
-        super(AttributeRegistration.ARMOR.get(), PERFORATE_ID, MobEffectCategory.HARMFUL, 0x964B00, AttributeModifier.Operation.MULTIPLY_TOTAL);
+        super(AttributeRegistration.ARMOR.get(), PERFORATE_ID, MobEffectCategory.HARMFUL, 0x964B00, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
 
     @Override
-    public DamageTypeEnum getDamageType() {
-        return DamageTypeEnum.PUNCTURE;
+    public ComplexDamageTypes getDamageType() {
+        return ComplexDamageTypes.PUNCTURE;
     }
 
 
     @Override
     public ComplexEffectInstance getDefaultDamageInstance(LivingEntity attacker, LivingEntity victim, DamageInstance procInstance) {
-
-
-
-
-
-
-
-        ComplexEffectInstance instance = new ComplexEffectInstance(UUID.randomUUID(),attacker.getUUID(),-0.05f,20 * 5);
-
-
-
-
-
-
+        ComplexEffectInstance instance = ComplexEffectInstance.of(UUID.randomUUID(),attacker.getUUID(),-0.05f,20 * 5);
         return instance;
     }
 
@@ -56,9 +42,9 @@ public class Perforate extends ComplexStatChangeEffect  implements IDamageStatus
 
 
         //TODO replace with proper VF/SFX
-        if (!user.level.isClientSide) {
+        if (!user.level().isClientSide) {
 
-            ServerLevel serverLevel = (ServerLevel) user.level;
+            ServerLevel serverLevel = (ServerLevel) user.level();
 
             if (instance.source!=null) {
 
@@ -66,7 +52,7 @@ public class Perforate extends ComplexStatChangeEffect  implements IDamageStatus
 
 
                     Player player = serverLevel.getPlayerByUUID(instance.source);
-                    WorldTextOptions textOptions = WorldTextOptions.getSpecialInstance("aeonspast.perforate.application");
+                    WorldTextParticleOptions textOptions = WorldTextParticleOptions.getSpecialInstance("aeonspast.perforate.application");
 
 
                      double xpos = user.getX();
@@ -78,7 +64,7 @@ public class Perforate extends ComplexStatChangeEffect  implements IDamageStatus
                     double zd = 0;
 
 
-                    serverLevel.sendParticles((ServerPlayer) player, textOptions, true, xpos, ypos, zpos, 1, xd, yd, zd, 0d);
+                    serverLevel.sendParticles((ServerPlayer) player, textOptions,false, true, xpos, ypos, zpos, 1, xd, yd, zd, 0d);
 
 
 

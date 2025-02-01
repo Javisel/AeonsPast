@@ -1,11 +1,12 @@
 package com.javisel.common.effects.Debuffs;
 
-import com.javisel.aeonspast.common.combat.damage.instances.DamageInstance;
-import com.javisel.aeonspast.common.combat.DamageTypeEnum;
-import com.javisel.aeonspast.common.effects.ComplexEffectInstance;
-import com.javisel.aeonspast.common.effects.ComplexStatChangeEffect;
-import com.javisel.aeonspast.common.effects.IDamageStatus;
-import com.javisel.aeonspast.common.particles.WorldTextOptions;
+import com.javisel.AeonsPast;
+import com.javisel.common.combat.ComplexDamageTypes;
+import com.javisel.common.effects.ComplexEffectInstance;
+import com.javisel.common.effects.ComplexStatChangeEffect;
+import com.javisel.common.effects.IDamageStatus;
+import com.javisel.common.particles.WorldTextParticleOptions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -16,35 +17,22 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.UUID;
 
-public class Stagger extends ComplexStatChangeEffect  implements IDamageStatus {
+public class Stagger extends ComplexStatChangeEffect implements IDamageStatus {
 
-    private static final  UUID STAGGER_ID = UUID.fromString("80b61474-bd51-4499-8767-145d5b12ed72");
+    private static final ResourceLocation STAGGER_ID = ResourceLocation.fromNamespaceAndPath(AeonsPast.MODID,"stagger");
     public Stagger( ) {
-        super(Attributes.MOVEMENT_SPEED, STAGGER_ID, MobEffectCategory.HARMFUL, 0, AttributeModifier.Operation.MULTIPLY_TOTAL);
+        super(Attributes.MOVEMENT_SPEED, STAGGER_ID, MobEffectCategory.HARMFUL, 0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
     @Override
-    public DamageTypeEnum getDamageType() {
-        return DamageTypeEnum.IMPACT;
+    public ComplexDamageTypes getDamageType() {
+        return ComplexDamageTypes.IMPACT;
     }
 
 
     @Override
     public ComplexEffectInstance getDefaultDamageInstance(LivingEntity attacker, LivingEntity victim, DamageInstance procInstance) {
-
-
-
-
-
-
-
-        ComplexEffectInstance instance = new ComplexEffectInstance(UUID.randomUUID(),attacker.getUUID(),-1f,20 * 5);
-
-
-
-
-
-
+        ComplexEffectInstance instance = ComplexEffectInstance.of(UUID.randomUUID(),attacker.getUUID(),-1f,20 * 5);
         return instance;
     }
 
@@ -55,9 +43,9 @@ public class Stagger extends ComplexStatChangeEffect  implements IDamageStatus {
 
 
         //TODO replace with proper VF/SFX
-        if (!user.level.isClientSide) {
+        if (!user.level().isClientSide) {
 
-            ServerLevel serverLevel = (ServerLevel) user.level;
+            ServerLevel serverLevel = (ServerLevel) user.level();
 
             if (instance.source!=null) {
 
@@ -65,7 +53,7 @@ public class Stagger extends ComplexStatChangeEffect  implements IDamageStatus {
 
 
                     Player player = serverLevel.getPlayerByUUID(instance.source);
-                    WorldTextOptions textOptions = WorldTextOptions.getSpecialInstance("aeonspast.stagger.application");
+                    WorldTextParticleOptions textOptions = WorldTextOptions.getSpecialInstance("aeonspast.stagger.application");
 
 
                      double xpos = user.getX();
@@ -77,7 +65,7 @@ public class Stagger extends ComplexStatChangeEffect  implements IDamageStatus {
                     double zd = 0;
 
 
-                    serverLevel.sendParticles((ServerPlayer) player, textOptions, true, xpos, ypos, zpos, 1, xd, yd, zd, 0d);
+                    serverLevel.sendParticles((ServerPlayer) player, textOptions,false, true, xpos, ypos, zpos, 1, xd, yd, zd, 0d);
 
 
 

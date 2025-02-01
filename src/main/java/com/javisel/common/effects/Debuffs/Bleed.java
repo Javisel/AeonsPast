@@ -1,6 +1,9 @@
 package com.javisel.common.effects.Debuffs;
 
+import com.javisel.common.combat.APDamageSource;
+import com.javisel.common.combat.ComplexDamageTypes;
 import com.javisel.common.effects.ComplexEffect;
+import com.javisel.common.effects.ComplexEffectInstance;
 import com.javisel.common.effects.IDamageStatus;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -36,8 +39,8 @@ public class Bleed extends ComplexEffect implements IDamageStatus {
      }
 
     @Override
-    public DamageTypeEnum getDamageType() {
-        return DamageTypeEnum.BLEED;
+    public ComplexDamageTypes getDamageType() {
+        return ComplexDamageTypes.BLEED;
     }
 
     @Override
@@ -47,6 +50,6 @@ public class Bleed extends ComplexEffect implements IDamageStatus {
         double power = (float) (procInstance.getMitigatedAmount()  * 0.15);
 
 
-        return new ComplexEffectInstance(UUID.randomUUID(),attacker.getUUID(),power,(20 * 5) +1);
+        return ComplexEffectInstance.of(UUID.randomUUID(),attacker.getUUID(),power,(20 * 5) +1);
     }
 }

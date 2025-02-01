@@ -1,8 +1,10 @@
 package com.javisel.common.effects;
 
 import com.javisel.common.attatchments.EntityData;
+import com.javisel.common.combat.APDamageSource;
 import com.javisel.common.registration.AttachmentTypeRegistration;
 import com.javisel.utilities.Utilities;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -10,15 +12,17 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ComplexEffect extends MobEffect {
 
+    protected final Holder<MobEffect> holder;
 
     //TODO Color codes for all Effects
     public ComplexEffect(MobEffectCategory effectCate, int effectColour) {
         super(effectCate, effectColour);
-
+        holder = Holder.direct(this);
     }
 
     @Override
@@ -78,11 +82,11 @@ public class ComplexEffect extends MobEffect {
         EntityData entityData = user.getData(AttachmentTypeRegistration.ENTITY_DATA.get());
 
 
-        ArrayList<ComplexEffectInstance> instances;
-        if (entityData.getMobEffectArrayListHashMap().containsKey(this)) {
+        List<ComplexEffectInstance> instances;
+        if (entityData.getMobEffectArrayListHashMap().containsKey(Holder.direct(this))) {
 
 
-            instances = entityData.getMobEffectArrayListHashMap().get(this);
+            instances = entityData.getMobEffectArrayListHashMap().get(Holder.direct(this));
 
 
         } else {
@@ -91,20 +95,20 @@ public class ComplexEffect extends MobEffect {
 
         instances.add(instance);
 
-        entityData.getMobEffectArrayListHashMap().put(this, instances);
+        entityData.getMobEffectArrayListHashMap().put(Holder.direct(this), instances);
 
 
-        if (user.hasEffect(this)) {
+        if (user.hasEffect(Holder.direct(this))) {
 
-            if (user.getEffect(this).getDuration() < instance.duration) {
-                user.forceAddEffect(new MobEffectInstance(this, (int) instance.duration, 0, false, this instanceof StatusEffect, this instanceof StatusEffect), null);
+            if (user.getEffect(Holder.direct(this)).getDuration() < instance.duration) {
+                user.forceAddEffect(new MobEffectInstance(Holder.direct(this), (int) instance.duration, 0, false, this instanceof StatusEffect, this instanceof StatusEffect), null);
 
             }
 
 
         } else {
 
-            user.forceAddEffect(new MobEffectInstance(this, (int) instance.duration, 0, false, this instanceof StatusEffect, this instanceof StatusEffect), null);
+            user.forceAddEffect(new MobEffectInstance(Holder.direct(this), (int) instance.duration, 0, false, this instanceof StatusEffect, this instanceof StatusEffect), null);
 
         }
         recalculateInstances(user);
@@ -118,7 +122,7 @@ public class ComplexEffect extends MobEffect {
         EntityData entityData = user.getData(AttachmentTypeRegistration.ENTITY_DATA.get());
 
 
-        ArrayList<ComplexEffectInstance> instances;
+        List<ComplexEffectInstance> instances;
         if (entityData.getMobEffectArrayListHashMap().containsKey(this)) {
 
 
@@ -150,7 +154,7 @@ public class ComplexEffect extends MobEffect {
 
         if (instances.isEmpty()) {
 
-            user.removeEffect(this);
+            user.removeEffect(Holder.direct(this));
         }
 
 
@@ -194,18 +198,17 @@ public class ComplexEffect extends MobEffect {
     }
 
 
-    public ArrayList<ComplexEffectInstance> getAllInstancesOnEntity(LivingEntity entity) {
+    public List<ComplexEffectInstance> getAllInstancesOnEntity(LivingEntity entity) {
+
+        List<ComplexEffectInstance> effectInstances = new ArrayList<>();
 
 
-        ArrayList<ComplexEffectInstance> effectInstances = new ArrayList<>();
+        EntityData entityData = entity.getData(AttachmentTypeRegistration.ENTITY_DATA.get());
 
 
-        IEntityData entityData = Utilities.getEntityData(entity);
+        if (entityData.getMobEffectArrayListHashMap().containsKey(Holder.direct(this))) {
 
-
-        if (entityData.getMobEffectArrayListHashMap().containsKey(this)) {
-
-            effectInstances = entityData.getMobEffectArrayListHashMap().get(this);
+            effectInstances = entityData.getMobEffectArrayListHashMap().get(Holder.direct(this));
 
         }
 
@@ -224,11 +227,11 @@ public class ComplexEffect extends MobEffect {
 
     public void consumeEffect(LivingEntity holder) {
 
-        IEntityData entityData = Utilities.getEntityData(holder);
+        EntityData entityData = holder.getData(AttachmentTypeRegistration.ENTITY_DATA.get());
 
-        entityData.getMobEffectArrayListHashMap().remove(this);
+        entityData.getMobEffectArrayListHashMap().remove(Holder.direct(this));
 
-        holder.removeEffect(this);
+        holder.removeEffect(Holder.direct(this));
 
 
     }

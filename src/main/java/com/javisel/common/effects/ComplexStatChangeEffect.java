@@ -1,5 +1,7 @@
 package com.javisel.common.effects;
 
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -11,11 +13,11 @@ import java.util.UUID;
 public class ComplexStatChangeEffect extends StatusEffect {
 
 
-    private final Attribute attribute;
-    private final UUID effectId;
+    private final Holder<Attribute> attribute;
+    private final ResourceLocation effectId;
     private final AttributeModifier.Operation operation;
    protected   boolean doesStack = true;
-    public ComplexStatChangeEffect(Attribute attribute, UUID effectId, MobEffectCategory effectCategory, int colorCode, AttributeModifier.Operation operation) {
+    public ComplexStatChangeEffect(Holder<Attribute> attribute, ResourceLocation effectId, MobEffectCategory effectCategory, int colorCode, AttributeModifier.Operation operation) {
         super(effectCategory, colorCode);
         this.attribute = attribute;
         this.effectId = effectId;
@@ -57,7 +59,7 @@ public class ComplexStatChangeEffect extends StatusEffect {
         }
 
 
-        AttributeModifier modifier = new AttributeModifier(effectId, this.getRegistryName().toString(), power, operation);
+        AttributeModifier modifier = new AttributeModifier(effectId, power, operation);
 
         user.getAttribute(attribute).addPermanentModifier(modifier);
 

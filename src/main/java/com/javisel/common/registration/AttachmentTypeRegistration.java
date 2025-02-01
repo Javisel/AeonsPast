@@ -10,5 +10,5 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 public class AttachmentTypeRegistration {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, AeonsPast.MODID);
 
-    public static final DeferredHolder<AttachmentType<?>,AttachmentType<EntityData>> ENTITY_DATA = ATTACHMENT_TYPES.register("entity_data", () -> AttachmentType.builder());
+    public static final DeferredHolder<AttachmentType<?>,AttachmentType<EntityData>> ENTITY_DATA = ATTACHMENT_TYPES.register("entity_data", () -> AttachmentType.builder(EntityData::new).serialize(EntityData.CODEC).build());
 }

@@ -1,11 +1,9 @@
 package com.javisel.common.effects.buffs.generic;
 
-import com.javisel.aeonspast.common.effects.ComplexStatChangeEffect;
-import com.javisel.aeonspast.common.registration.AttributeRegistration;
+import com.javisel.common.effects.ComplexStatChangeEffect;
+import com.javisel.common.registration.AttributeRegistration;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.UUID;
 

@@ -164,7 +164,7 @@ public class DamageTypeDataLoader extends SimplePreparableReloadListener<Map<Res
         return object;
     }
 
-    public static DamageTypes getByVanillaType(DamageSource source) {
+    public static ComplexDamageTypes getByVanillaType(DamageSource source) {
 
         for (ResourceLocation rkey : DAMAGE_TYPE_DATA.keySet()) {
 
@@ -177,7 +177,7 @@ public class DamageTypeDataLoader extends SimplePreparableReloadListener<Map<Res
                 if (vt.equals(key)) {
 
 
-                    return DamageTypes.getByString(rkey.toString());
+                    return ComplexDamageTypes.getByType(rkey.toString());
 
                 }
 

@@ -1,20 +1,15 @@
 package com.javisel.common.effects;
 
-import com.google.common.collect.Lists;
 import com.javisel.AeonsPast;
 import com.javisel.utilities.StringKeys;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,8 +25,11 @@ public class ComplexEffectInstance {
     public boolean remove = false;
     List<StatusFlags> statusFlags = new ArrayList<>();
 
+    public static ComplexEffectInstance of(UUID instance,UUID source,double power,float duration) {
+        return new ComplexEffectInstance(instance,source,power,duration,duration,false,new ArrayList<>());
+    }
 
-    private ComplexEffectInstance(UUID instanceID, UUID source, double power, float duration, float initialDuration,boolean remove, List<StatusFlags> statusFlags) {
+    public ComplexEffectInstance(UUID instanceID, UUID source, double power, float duration, float initialDuration, boolean remove, List<StatusFlags> statusFlags) {
         this.instanceID = instanceID;
         this.source = source;
         this.power = power;

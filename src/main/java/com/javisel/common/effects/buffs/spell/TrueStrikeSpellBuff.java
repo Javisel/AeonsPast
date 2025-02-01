@@ -1,10 +1,7 @@
 package com.javisel.common.effects.buffs.spell;
 
-import com.javisel.aeonspast.common.combat.damage.instances.DamageInstance;
-import com.javisel.aeonspast.common.combat.DamageTypeEnum;
-import com.javisel.aeonspast.common.combat.damage.sources.APDamageSource;
-import com.javisel.aeonspast.common.combat.damage.sources.APEntityDamageSource;
-import com.javisel.aeonspast.common.effects.ComplexEffect;
+import com.javisel.common.combat.APDamageSource;
+import com.javisel.common.effects.ComplexEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
