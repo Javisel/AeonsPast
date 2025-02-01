@@ -1,25 +1,17 @@
 package com.javisel.common.particles;
 
-import com.javisel.common.combat.DamageTypes;
+import com.javisel.common.combat.ComplexDamageTypes;
 import com.javisel.common.registration.ParticleTypeRegistration;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.TrailParticleOption;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.phys.Vec3;
 
 public record WorldTextParticleOptions(String text, int colour) implements ParticleOptions {
 
@@ -55,7 +47,7 @@ public record WorldTextParticleOptions(String text, int colour) implements Parti
 
 
 
-    public static WorldTextParticleOptions getWorldNumberOptionByDamage(DamageTypes type, float amount, int criticals) {
+    public static WorldTextParticleOptions getWorldNumberOptionByDamage(ComplexDamageTypes type, float amount, int criticals) {
 
 
         String text = String.format("%.2f", amount);
