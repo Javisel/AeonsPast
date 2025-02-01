@@ -1,12 +1,7 @@
 package com.javisel.common.effects.Debuffs;
 
-import com.javisel.aeonspast.common.combat.damage.instances.DamageInstance;
-import com.javisel.aeonspast.common.combat.DamageTypeEnum;
-import com.javisel.aeonspast.common.combat.damage.sources.APDamageSource;
-import com.javisel.aeonspast.common.combat.damage.sources.APEntityDamageSource;
-import com.javisel.aeonspast.common.effects.ComplexEffect;
-import com.javisel.aeonspast.common.effects.ComplexEffectInstance;
-import com.javisel.aeonspast.common.effects.IDamageStatus;
+import com.javisel.common.effects.ComplexEffect;
+import com.javisel.common.effects.IDamageStatus;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectCategory;

@@ -1,10 +1,21 @@
 package com.javisel.common.effects;
 
-import com.javisel.aeonspast.utilities.StringKeys;
+import com.google.common.collect.Lists;
+import com.javisel.AeonsPast;
+import com.javisel.utilities.StringKeys;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class ComplexEffectInstance {
@@ -17,72 +28,29 @@ public class ComplexEffectInstance {
     public float initialDuration;
     public float tickRate = 20;
     public boolean remove = false;
-    ArrayList<StatusFlags> statusFlags = new ArrayList<>();
+    List<StatusFlags> statusFlags = new ArrayList<>();
 
-    public ComplexEffectInstance(UUID instanceID, UUID source, double power, float duration) {
-        this.instanceID = instanceID;
-        this.source = source;
-        this.power = power;
-        this.duration = duration;
-        this.initialDuration = duration;
-    }
 
-    public ComplexEffectInstance(UUID instanceID, UUID source, double power, float duration, StatusFlags... statusFlags) {
-        this.instanceID = instanceID;
-        this.source = source;
-        this.power = power;
-        this.duration = duration;
-        this.initialDuration = duration;
-        this.statusFlags = new ArrayList<StatusFlags>(Arrays.asList(statusFlags));
-    }
-
-    private ComplexEffectInstance(UUID instanceID, UUID source, double power, float duration, float initialDuration) {
+    private ComplexEffectInstance(UUID instanceID, UUID source, double power, float duration, float initialDuration,boolean remove, List<StatusFlags> statusFlags) {
         this.instanceID = instanceID;
         this.source = source;
         this.power = power;
         this.duration = duration;
         this.initialDuration = initialDuration;
-    }
-    public ComplexEffectInstance( UUID source, double power, float duration) {
-        this.instanceID = UUID.randomUUID();
-        this.source = source;
-        this.power = power;
-        this.duration = duration;
-        this.initialDuration = duration;
+        this.statusFlags = statusFlags;
     }
 
-    public ComplexEffectInstance( UUID source, double power, float duration, StatusFlags... statusFlags) {
-        this.instanceID = UUID.randomUUID();
-        this.source = source;
-        this.power = power;
-        this.duration = duration;
-        this.initialDuration = duration;
-        this.statusFlags = new ArrayList<StatusFlags>(Arrays.asList(statusFlags));
-    }
+
     public static ComplexEffectInstance fromNBT(CompoundTag tag) {
+        return CODEC.parse(new Dynamic<>(NbtOps.INSTANCE,tag)).resultOrPartial(AeonsPast.LOGGER::error).orElseThrow();
+    }
 
+    public CompoundTag toNBT() {
+        return (CompoundTag) CODEC.encodeStart(NbtOps.INSTANCE,this).resultOrPartial(AeonsPast.LOGGER::error).orElseThrow();
+    }
 
-        ComplexEffectInstance instance = new ComplexEffectInstance(tag.getUUID(StringKeys.INSTANCE_ID),tag.hasUUID(StringKeys.SOURCE_ID) ?  tag.getUUID(StringKeys.SOURCE_ID) : null, tag.getDouble(StringKeys.POWER), tag.getFloat(StringKeys.DURATION), tag.getFloat(StringKeys.INITIAL_DURATION));
-
-        instance.remove = tag.getBoolean(StringKeys.REMOVE);
-        CompoundTag flags = tag.getCompound(STATUS_FLAGS);
-
-        for (String key : flags.getAllKeys()) {
-
-
-            int id = flags.getInt(key);
-
-            StatusFlags flag = StatusFlags.STATUS_FLAGS[id];
-
-            instance.statusFlags.add(flag);
-
-
-        }
-
-
-        return instance;
-
-
+    public UUID getInstanceID() {
+        return instanceID;
     }
 
     public UUID getSource() {
@@ -101,37 +69,23 @@ public class ComplexEffectInstance {
         return initialDuration;
     }
 
-    public CompoundTag toNBT() {
+
+    public static final Codec<ComplexEffectInstance> CODEC = RecordCodecBuilder.create(
+            instance -> instance.group(
+                            UUIDUtil.CODEC.fieldOf(StringKeys.INSTANCE_ID).forGetter(ComplexEffectInstance::getInstanceID),
+                            UUIDUtil.CODEC.fieldOf(StringKeys.SOURCE_ID).forGetter(ComplexEffectInstance::getSource),
+                            Codec.DOUBLE.fieldOf(StringKeys.POWER).forGetter(ComplexEffectInstance::getPower),
+                            Codec.FLOAT.fieldOf(StringKeys.DURATION).forGetter(ComplexEffectInstance::getDuration),
+                            Codec.FLOAT.fieldOf(StringKeys.INITIAL_DURATION).forGetter(ComplexEffectInstance::getInitialDuration),
+                            Codec.BOOL.fieldOf(StringKeys.REMOVE).forGetter(complexEffectInstance -> complexEffectInstance.remove),
+                    StatusFlags.LIST_CODEC.fieldOf(STATUS_FLAGS).forGetter(complexEffectInstance -> complexEffectInstance.statusFlags)
+                            )
+                    .apply(instance, ComplexEffectInstance::new)
+    );
 
 
-        CompoundTag tag = new CompoundTag();
-
-        tag.putUUID(StringKeys.INSTANCE_ID, instanceID);
-
-        if (source !=null) {
-            tag.putUUID(StringKeys.SOURCE, source);
-        }
-        tag.putDouble(StringKeys.POWER, power);
-        tag.putFloat(StringKeys.DURATION, duration);
-        tag.putFloat(StringKeys.INITIAL_DURATION, initialDuration);
-        tag.putBoolean(StringKeys.REMOVE, remove);
-
-        CompoundTag statusFlagTag = new CompoundTag();
-
-        int i = 0;
-        for (StatusFlags flags : statusFlags) {
-
-            statusFlagTag.putInt("flag_" + i, flags.id);
-
-            i++;
-
-        }
-
-        tag.put(STATUS_FLAGS, statusFlagTag);
 
 
-        return tag;
-    }
 
 
 }

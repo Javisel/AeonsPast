@@ -3,6 +3,7 @@ package com.javisel.common.effects;
 import com.javisel.aeonspast.common.capabiltiies.entity.IEntityData;
 import com.javisel.aeonspast.common.combat.damage.sources.APDamageSource;
 import com.javisel.aeonspast.utilities.Utilities;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -32,12 +33,12 @@ public class ComplexEffect extends MobEffect {
 
 
     @Override
-    public final void applyEffectTick(LivingEntity livingEntity, int durationIn) {
-        super.applyEffectTick(livingEntity, durationIn);
+    public final boolean applyEffectTick(ServerLevel level, LivingEntity livingEntity, int durationIn) {
+        super.applyEffectTick(level,livingEntity, durationIn);
 
 
         if (livingEntity.isDeadOrDying() || livingEntity.isRemoved()) {
-            return;
+            return false;
         }
 
 
@@ -63,6 +64,7 @@ public class ComplexEffect extends MobEffect {
         }
 
 
+        return false;
     }
 
 
