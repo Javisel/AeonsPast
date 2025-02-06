@@ -1,4 +1,4 @@
-package com.javisel.common.item;
+package com.javisel.common.item.weapon;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

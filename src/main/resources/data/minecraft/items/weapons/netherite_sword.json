@@ -8,9 +8,8 @@
   "status_chance": 40,
   "durability": 2375,
   "damage_type": "aeonspast:slash",
-  "attack_type": "melee" ,
+  "attack_type": "melee",
   "properties": [
     "aeonspast:fireproof"
   ]
-
 }

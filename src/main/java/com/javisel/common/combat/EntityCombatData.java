@@ -14,16 +14,16 @@ import net.neoforged.neoforge.common.util.INBTSerializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public record EntityCombatData(int critsHit, boolean status, List<Double> bleeds) implements INBTSerializable {
+public record EntityCombatData(int critsHit, boolean status) implements INBTSerializable {
 
-    public static final EntityCombatData DEFAULT = new EntityCombatData(0,false, new ArrayList<>());
+    public static final EntityCombatData DEFAULT = new EntityCombatData(0,false);
 
 
     public static final Codec<EntityCombatData> BASIC_CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     Codec.INT.fieldOf("crits_hit").forGetter(EntityCombatData::critsHit),
-                    Codec.BOOL.fieldOf("status").forGetter(EntityCombatData::status),
-                    Codec.DOUBLE.listOf().fieldOf("bleeds").forGetter(EntityCombatData::bleeds)
+                    Codec.BOOL.fieldOf("status").forGetter(EntityCombatData::status)
+
 
 
             ).apply(instance, EntityCombatData::new)
@@ -31,7 +31,6 @@ public record EntityCombatData(int critsHit, boolean status, List<Double> bleeds
     public static final StreamCodec<ByteBuf, EntityCombatData> BASIC_STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT, EntityCombatData::critsHit,
             ByteBufCodecs.BOOL, EntityCombatData::status,
-            ByteBufCodecs.DOUBLE.apply(ByteBufCodecs.list()), EntityCombatData::bleeds,
             EntityCombatData::new
     );
 

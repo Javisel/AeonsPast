@@ -1,18 +1,16 @@
 package com.javisel.common.registration;
 
 import com.javisel.AeonsPast;
-import com.javisel.common.entity.projectile.ProjectileData;
-import com.javisel.common.item.WeaponData;
+import com.javisel.common.item.ItemData;
+import com.javisel.common.item.weapon.WeaponData;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
-import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-import static com.javisel.common.item.WeaponData.BASIC_CODEC;
-import static com.javisel.common.item.WeaponData.BASIC_STREAM_CODEC;
-import static com.javisel.common.registration.DataAttachmentRegistration.ATTACHMENT_TYPES;
+import static com.javisel.common.item.weapon.WeaponData.BASIC_CODEC;
+import static com.javisel.common.item.weapon.WeaponData.BASIC_STREAM_CODEC;
 
 public class DataComponentsRegistration {
 
@@ -28,6 +26,14 @@ public class DataComponentsRegistration {
                     .networkSynchronized(BASIC_STREAM_CODEC)
     );
 
+  public static final Supplier<DataComponentType<ItemData>> ITEM_DATA = REGISTRAR.registerComponentType(
+          "item_data",
+          builder -> builder
+                  // The codec to read/write the data to disk
+                  .persistent(ItemData.BASIC_CODEC)
+                  // The codec to read/write the data across the network
+                  .networkSynchronized(ItemData.BASIC_STREAM_CODEC)
+  );
 
 
 

@@ -1,6 +1,5 @@
 package com.javisel.common.effects.Debuffs;
 
-import com.javisel.common.combat.APDamageSource;
 import com.javisel.common.combat.ComplexDamageTypes;
 import com.javisel.common.effects.ComplexEffect;
 import com.javisel.common.effects.ComplexEffectInstance;
@@ -11,6 +10,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Bleed extends ComplexEffect implements IDamageStatus {
@@ -18,38 +18,32 @@ public class Bleed extends ComplexEffect implements IDamageStatus {
 
     public Bleed( ) {
         super(MobEffectCategory.HARMFUL, 0xFF0000);
+
     }
 
     @Override
     public void applyTickableEffect(ComplexEffectInstance instance, LivingEntity entity) {
         super.applyTickableEffect(instance, entity);
 
-        Level level = entity.getLevel();
+        ServerLevel level = (ServerLevel) entity.level();
+        DamageSource source = new DamageSource(ComplexDamageTypes.BLEED.getTypeHolder(level.registryAccess()), null,level.getEntity(instance.source),null);
 
-        if (!level.isClientSide) {
+        entity.hurtServer(level,source, (float) instance.getPower());
 
-            ServerLevel serverLevel = (ServerLevel) level;
-            DamageInstance dmg = DamageInstance.getGenericProcInstance(DamageTypeEnum.BLEED,instance.power);
-
-            DamageSource source  = instance.source !=null ? new APEntityDamageSource("bleed",dmg,serverLevel.getEntity(instance.source)) : new APDamageSource("bleed",dmg);
-
-            entity.hurt(source, (float) instance.power);
-
-        }
      }
+
 
     @Override
     public ComplexDamageTypes getDamageType() {
-        return ComplexDamageTypes.BLEED;
+        return ComplexDamageTypes.SLASH;
     }
 
     @Override
-    public ComplexEffectInstance getDefaultDamageInstance(LivingEntity attacker, LivingEntity victim, DamageInstance procInstance) {
+    public ComplexEffectInstance getDefaultDamageInstance(LivingEntity attacker, LivingEntity victim, float DMG, DamageSource source) {
+
+        double power =   DMG  * 0.15;
 
 
-        double power = (float) (procInstance.getMitigatedAmount()  * 0.15);
-
-
-        return ComplexEffectInstance.of(UUID.randomUUID(),attacker.getUUID(),power,(20 * 5) +1);
+        return new ComplexEffectInstance(UUID.randomUUID(),attacker.getUUID(),power,(20 * 5) +1,20*5+1,false,new ArrayList<>());
     }
 }

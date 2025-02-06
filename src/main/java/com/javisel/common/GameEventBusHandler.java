@@ -1,13 +1,15 @@
 package com.javisel.common;
 
 import com.javisel.common.combat.*;
+import com.javisel.common.effects.ComplexEffect;
+import com.javisel.common.effects.IDamageStatus;
 import com.javisel.common.entity.EntityDataLoader;
 import com.javisel.common.entity.projectile.ProjectileData;
 import com.javisel.common.entity.projectile.ProjectileDataLoader;
 import com.javisel.common.entity.projectile.ProjectileStatisticalData;
-import com.javisel.common.item.WeaponData;
-import com.javisel.common.item.WeaponDataLoader;
-import com.javisel.common.item.WeaponStatisticalData;
+import com.javisel.common.item.weapon.WeaponData;
+import com.javisel.common.item.weapon.WeaponDataLoader;
+import com.javisel.common.item.weapon.WeaponStatisticalData;
 import com.javisel.common.particles.WorldTextParticleOptions;
 import com.javisel.common.registration.AttributeRegistration;
 import com.javisel.common.registration.DataAttachmentRegistration;
@@ -25,17 +27,14 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEquipmentChangeEvent;
-
-import java.util.Random;
 
 
 @EventBusSubscriber
@@ -52,13 +51,14 @@ public class GameEventBusHandler {
         double multiplier = 0;
         if (source.getDirectEntity() instanceof LivingEntity living) {
 
-
             ItemStack weapon = source.getWeaponItem();
-            base = (float) living.getAttributeValue(AttributeRegistration.WEAPON_POWER.getDelegate());
+            WeaponStatisticalData weaponStatisticalData = WeaponDataLoader.getByItemStack(weapon);
+            if (weaponStatisticalData == null) {
+                weaponStatisticalData=WeaponStatisticalData.DEFAULT;
+            }
+            base = (float) ((float) living.getAttributeValue(AttributeRegistration.WEAPON_POWER.getDelegate()) + living.getAttributeValue(Attributes.ATTACK_DAMAGE));
 
-            double chance = living.getAttributeValue(AttributeRegistration.CRITICAL_CHANCE);
-
-            int crits = CombatEngine.criticals((int) chance);
+            int crits = CombatEngine.rollDirectCrit(living,victim);
 
             if (crits > 0) {
 
@@ -66,20 +66,11 @@ public class GameEventBusHandler {
 
             }
 
+                if (weaponStatisticalData!=null && weaponStatisticalData.attack_type().equals(StringKeys.RANGED)) {
 
-
-
-            if (WeaponDataLoader.getByItemStack(weapon) != null) {
-
-                WeaponStatisticalData weaponStatisticalData = WeaponDataLoader.getByItemStack(weapon);
-
-
-                if (weaponStatisticalData.attack_type().equals(StringKeys.RANGED)) {
                     multiplier *= 0.1;
-
+                    base*=0.1;
                 }
-
-            }
 
             float total = base;
             total += (float) (base * multiplier);
@@ -87,44 +78,25 @@ public class GameEventBusHandler {
             event.setNewDamage(total);
 
             double schance =  living.getAttributeValue(AttributeRegistration.STATUS_CHANCE);
-            boolean status = false;
-            Random random = new Random();
-            if (random.nextInt(101)<=schance) {
+            boolean status = CombatEngine.rollDirectStatus(living,victim,ComplexDamageTypes.getByString(weaponStatisticalData.damageType()));
 
-                //DO STATUS
-                status = true;
-
-
-            }
             victim.setData(DataAttachmentRegistration.ENTITY_COMBAT_DATA, new EntityCombatData(crits,status));
 
         } else if (source.getDirectEntity() instanceof Projectile projectile) {
 
             ProjectileData data = projectile.getData(DataAttachmentRegistration.PROJECTILE_DATA);
 
-
             double damage = projectile.getData(DataAttachmentRegistration.PROJECTILE_DATA).damage();
 
-            double chance = data.critical_chance();
-
-            int crits = CombatEngine.criticals((int) chance);
+            int crits = CombatEngine.rollIndirectCrit(data,victim);
             double schance = data.status_chance();
-            boolean status = false;
-            Random random = new Random();
-            if (random.nextInt(101)<=schance) {
+            boolean status = CombatEngine.rollIndirectStatus(data,victim,ComplexDamageTypes.getByString(data.damage_type()));;
 
-                //DO STATUS
-                status = true;
-
-
-            }
             multiplier = crits > 0 ? (crits * data.critical_damage()) : 1;
 
             victim.setData(DataAttachmentRegistration.ENTITY_COMBAT_DATA, new EntityCombatData(crits,status));
 
             base = (float) damage;
-
-            System.out.println("Base: " + base);
 
             event.setNewDamage((float) ((amount + base) * multiplier));
         }
@@ -134,7 +106,7 @@ public class GameEventBusHandler {
 
 
     @SubscribeEvent
-    public static void damageNumbers(LivingDamageEvent.Post event) {
+    public static void postDamageProcessing(LivingDamageEvent.Post event) {
 
 
         DamageSource source = event.getSource();
@@ -151,18 +123,19 @@ public class GameEventBusHandler {
             if (source.getDirectEntity() == serverPlayer) {
 
                 ItemStack weapon = source.getWeaponItem();
-                if (weapon == ItemStack.EMPTY || source.typeHolder().getRegisteredName().equals("minecraft:player_attack")) {
+
+                WeaponData weaponData = weapon.get(DataComponentsRegistration.WEAPON_DATA);
+
+                if (weaponData == null) {
                     type = ComplexDamageTypes.IMPACT;
                 } else {
 
-                    WeaponData weaponData = weapon.get(DataComponentsRegistration.WEAPON_DATA);
 
-                    if (weaponData != null) {
+                    type = ComplexDamageTypes.getByString(weaponData.damage_type());
+                    if (type == null) {
 
-                        type = ComplexDamageTypes.getByType(weaponData.damage_type());
-
+                        type = ComplexDamageTypes.IMPACT;
                     }
-
 
                 }
             } else {
@@ -170,11 +143,20 @@ public class GameEventBusHandler {
 
                     ProjectileData data = projectile.getData(DataAttachmentRegistration.PROJECTILE_DATA);
 
-                    type = ComplexDamageTypes.getByType(data.damage_type());
+                    type = ComplexDamageTypes.getByString(data.damage_type());
                 }
             }
 
+            if (type==null) {
+
+                type=ComplexDamageTypes.getbyKey(event.getSource().typeHolder().getKey());
+
+
+            }
+
+
             color = type == null || event.getNewDamage() == 0 ? 0 : type.getColor();
+
 
             int crits = victim.getData(DataAttachmentRegistration.ENTITY_COMBAT_DATA).critsHit();
 
@@ -193,6 +175,21 @@ public class GameEventBusHandler {
             if (combatData.status()) {
 
 
+                if (type.getStatusEffect() != null) {
+
+
+                    ComplexEffect complexEffect = (ComplexEffect) type.getStatusEffect();
+
+                    if (complexEffect instanceof IDamageStatus damageStatus) {
+
+                        complexEffect.addnewComplexInstance(damageStatus.getDefaultDamageInstance(serverPlayer,victim,event.getNewDamage(), event.getSource()),victim);
+
+                    }
+
+
+
+
+                }
 
 
             }
@@ -213,27 +210,11 @@ public class GameEventBusHandler {
     }
 
 
-    @SubscribeEvent
-    public static void attributechange(ItemAttributeModifierEvent event) {
 
 
-        ResourceLocation location = event.getItemStack().getItemHolder().getKey().location();
 
 
-        if (WeaponDataLoader.WEAPON_STATISTICAL_DATA.get(location) != null) {
 
-
-            ItemStack stack = event.getItemStack();
-
-            if (stack.get(DataComponentsRegistration.WEAPON_DATA) == null) {
-                WeaponDataLoader.WEAPON_STATISTICAL_DATA.get(location).loadToItem(null, stack);
-
-
-            }
-
-
-        }
-    }
 
 
     @SubscribeEvent
@@ -262,11 +243,7 @@ public class GameEventBusHandler {
 
     }
 
-    @SubscribeEvent
-    public static void attributeUpdate(LivingEquipmentChangeEvent event) {
 
-
-    }
 
     @SubscribeEvent
     public static void rangedProjectileChanges(EntityJoinLevelEvent event) {

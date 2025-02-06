@@ -27,6 +27,7 @@ public class MobEffectRegistration {
     public static final DeferredHolder<MobEffect,MobEffect> STAGGER = MOB_EFFECTS.register("stagger", () -> new Stagger());
     public static final DeferredHolder<MobEffect,MobEffect> RADIANCE = MOB_EFFECTS.register("radiance", () -> new Radiance());
     public static final DeferredHolder<MobEffect,MobEffect> BURN = MOB_EFFECTS.register("burn", () -> new Burn());
+    public static final DeferredHolder<MobEffect,MobEffect> FREEZE = MOB_EFFECTS.register("freeze", () -> new Freeze());
 
 
     public static final DeferredHolder<MobEffect,MobEffect> ATTACK_SPEED_BUFF = MOB_EFFECTS.register("complex_attack_speed_buff", () -> new AttackSpeedBuff());

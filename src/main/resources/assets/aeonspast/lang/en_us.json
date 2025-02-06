@@ -7,5 +7,7 @@
   "generic.status_chance": "Status Chance",
   "generic.melee_power": "Melee Power",
   "generic.ranged_power": "Ranged Power",
-  "generic.weapon_power": "Weapon Power"
+  "generic.weapon_power": "Weapon Power",
+  "tooltip.sleepingweapon.desc": "You need a closer look...",
+  "aeonspast:common": "Common"
 }

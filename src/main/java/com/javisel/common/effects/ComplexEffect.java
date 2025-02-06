@@ -1,9 +1,8 @@
 package com.javisel.common.effects;
 
-import com.javisel.common.attatchments.EntityData;
-import com.javisel.common.combat.APDamageSource;
-import com.javisel.common.registration.AttachmentTypeRegistration;
-import com.javisel.utilities.Utilities;
+import com.javisel.common.attachments.EntityData;
+
+import com.javisel.common.registration.DataAttachmentRegistration;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
@@ -47,7 +46,9 @@ public class ComplexEffect extends MobEffect {
 
 
 
+
         for (ComplexEffectInstance instance : getAllInstancesOnEntity(livingEntity)) {
+
 
 
             instance.duration--;
@@ -68,7 +69,7 @@ public class ComplexEffect extends MobEffect {
         }
 
 
-        return false;
+        return true;
     }
 
 
@@ -79,7 +80,7 @@ public class ComplexEffect extends MobEffect {
 
     public void addnewComplexInstance(ComplexEffectInstance instance, LivingEntity user) {
 
-        EntityData entityData = user.getData(AttachmentTypeRegistration.ENTITY_DATA.get());
+        EntityData entityData = user.getData(DataAttachmentRegistration.ENTITY_DATA.get());
 
 
         List<ComplexEffectInstance> instances;
@@ -119,7 +120,7 @@ public class ComplexEffect extends MobEffect {
 
     public void removeComplexInstance(UUID id, LivingEntity user) {
 
-        EntityData entityData = user.getData(AttachmentTypeRegistration.ENTITY_DATA.get());
+        EntityData entityData = user.getData(DataAttachmentRegistration.ENTITY_DATA.get());
 
 
         List<ComplexEffectInstance> instances;
@@ -164,38 +165,7 @@ public class ComplexEffect extends MobEffect {
     }
 
 
-    public boolean onpreHitEffect(LivingEntity attacker, LivingEntity blocker, APDamageSource damageSource) {
 
-
-        return true;
-    }
-
-    public void onHitEffect(LivingEntity attacker, LivingEntity blocker, APDamageSource damageSource) {
-
-
-    }
-
-    public void onpostHitEffect(LivingEntity attacker, LivingEntity blocker, APDamageSource damageSource) {
-
-
-    }
-
-
-    public boolean onOwnerpreHitEffect(LivingEntity attacker, LivingEntity blocker, APDamageSource damageSource) {
-
-
-        return true;
-    }
-
-    public void onOwnerHitEffect(LivingEntity attacker, LivingEntity blocker, APDamageSource damageSource) {
-
-
-    }
-
-    public void onOwnerpostHitEffect(LivingEntity attacker, LivingEntity blocker, APDamageSource damageSource) {
-
-
-    }
 
 
     public List<ComplexEffectInstance> getAllInstancesOnEntity(LivingEntity entity) {
@@ -203,7 +173,7 @@ public class ComplexEffect extends MobEffect {
         List<ComplexEffectInstance> effectInstances = new ArrayList<>();
 
 
-        EntityData entityData = entity.getData(AttachmentTypeRegistration.ENTITY_DATA.get());
+        EntityData entityData = entity.getData(DataAttachmentRegistration.ENTITY_DATA.get());
 
 
         if (entityData.getMobEffectArrayListHashMap().containsKey(Holder.direct(this))) {
@@ -227,7 +197,7 @@ public class ComplexEffect extends MobEffect {
 
     public void consumeEffect(LivingEntity holder) {
 
-        EntityData entityData = holder.getData(AttachmentTypeRegistration.ENTITY_DATA.get());
+        EntityData entityData = holder.getData(DataAttachmentRegistration.ENTITY_DATA.get());
 
         entityData.getMobEffectArrayListHashMap().remove(Holder.direct(this));
 

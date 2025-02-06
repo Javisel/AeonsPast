@@ -1,4 +1,4 @@
-package com.javisel.common.attatchments;
+package com.javisel.common.attachments;
 
 import com.javisel.common.effects.ComplexEffectInstance;
 import com.javisel.utilities.StringKeys;

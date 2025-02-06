@@ -1,4 +1,4 @@
-package com.javisel.common.item;
+package com.javisel.common.item.weapon;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
@@ -32,7 +32,7 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
     protected Map<ResourceLocation, WeaponStatisticalData> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         ImmutableMap.Builder<ResourceLocation, WeaponStatisticalData> builder = ImmutableMap.builder();
 
-        ResourceLocation resourceLocation = ResourceLocation.tryBuild(AeonsPast.MODID, "tags/items/weapons/weapons.json");
+        ResourceLocation resourceLocation = ResourceLocation.tryBuild(AeonsPast.MODID, "tags/item/weapons/weapons.json");
 
         HashSet<ResourceLocation> finalLocations = new HashSet<>();
 
@@ -55,6 +55,7 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
                         String loc = entry.getAsString();
                         ResourceLocation res = ResourceLocation.tryParse(loc);
                         finalLocations.add(res);
+
 
                     }
                 }
@@ -134,7 +135,12 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
         double durability = GsonHelper.getAsDouble(json, "durability");
         String damageType = GsonHelper.getAsString(json,"damage_type");
         String attack_type = GsonHelper.getAsString(json,"attack_type");
-
+        List<String> properties = new ArrayList<>();
+        if (json.has("properties") && json.get("properties").isJsonArray()) {
+            for (JsonElement element : json.getAsJsonArray("properties")) {
+                properties.add(element.getAsString());
+            }
+        }
 
         // Construct and return the new object
         var object = new WeaponStatisticalData(
@@ -147,7 +153,8 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
                         status_chance,
                         durability,
                 damageType,
-                attack_type
+                attack_type,
+                properties
 
         );
 
@@ -176,7 +183,6 @@ public class WeaponDataLoader extends SimplePreparableReloadListener<Map<Resourc
     public static WeaponStatisticalData getByItemStack(ItemStack stack) {
 
         ResourceLocation location = ResourceLocation.bySeparator(stack.getItemHolder().getRegisteredName(),':');
-
 
         return WEAPON_STATISTICAL_DATA.get(location);
 

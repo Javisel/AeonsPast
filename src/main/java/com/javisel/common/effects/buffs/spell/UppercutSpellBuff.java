@@ -1,6 +1,6 @@
 package com.javisel.common.effects.buffs.spell;
 
-import com.javisel.common.combat.APDamageSource;
+
 import com.javisel.common.effects.ComplexEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,32 +15,6 @@ public class UppercutSpellBuff extends ComplexEffect {
     }
 
 
-    @Override
-    public void onHitEffect(LivingEntity attacker, LivingEntity blocker, APDamageSource damageSource) {
-
-
-        DamageInstance instance = damageSource.instance;
-
-        if (instance.isMelee() && instance.doesProcWeaponHitEffects() && instance.getDamageDevice() instanceof ItemStack) {
-
-
-            double power = .8;
-            float ratioX = 0;
-            float ratioZ = 0;
-            power *= 1.0D - blocker.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
-
-            if (!(power <= 0.0D)) {
-                blocker.hasImpulse = true;
-                Vec3 vec3 = blocker.getDeltaMovement();
-                Vec3 vec31 = (new Vec3(ratioX, power, ratioZ));
-                blocker.setDeltaMovement(vec3.x / 2.0D - vec31.x, power, vec3.z / 2.0D - vec31.z);
-
-            }
-
-            consumeEffect(attacker);
-
-        }
-    }
 
 
 }

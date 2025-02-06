@@ -1,19 +1,18 @@
-package com.javisel.common.combat;
+package com.javisel.common.item.armor;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
 import com.javisel.AeonsPast;
+import com.javisel.common.item.armor.ArmorStatisticalData;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.loading.FMLPaths;
 
 import java.io.BufferedReader;
@@ -25,16 +24,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-public class DamageTypeDataLoader extends SimplePreparableReloadListener<Map<ResourceLocation, DamageTypeData>> {
-    public static final Map<ResourceLocation, DamageTypeData> DAMAGE_TYPE_DATA = new HashMap<>();
+public class ArmorDataLoader extends SimplePreparableReloadListener<Map<ResourceLocation, ArmorStatisticalData>> {
+    public static final Map<ResourceLocation, ArmorStatisticalData> Armor_STATISTICAL_DATA = new HashMap<>();
     private static final Gson GSON_INSTANCE = new GsonBuilder().setPrettyPrinting().create();
-    private static final String folder = "combatengine/damage_type";
+    private static final String folder = "items/armor";
 
     @Override
-    protected Map<ResourceLocation, DamageTypeData> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        ImmutableMap.Builder<ResourceLocation, DamageTypeData> builder = ImmutableMap.builder();
+    protected Map<ResourceLocation, ArmorStatisticalData> prepare(ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+        ImmutableMap.Builder<ResourceLocation, ArmorStatisticalData> builder = ImmutableMap.builder();
 
-        ResourceLocation resourceLocation = ResourceLocation.tryBuild(AeonsPast.MODID, "combatengine/damage_type/types.json");
+        ResourceLocation resourceLocation = ResourceLocation.tryBuild(AeonsPast.MODID, "tags/item/armor/armor.json");
 
         HashSet<ResourceLocation> finalLocations = new HashSet<>();
 
@@ -58,6 +57,7 @@ public class DamageTypeDataLoader extends SimplePreparableReloadListener<Map<Res
                         ResourceLocation res = ResourceLocation.tryParse(loc);
                         finalLocations.add(res);
 
+                        System.out.println("Loco: " + res.toString());
 
                     }
                 }
@@ -74,7 +74,7 @@ public class DamageTypeDataLoader extends SimplePreparableReloadListener<Map<Res
                                 return null;
                             }
                         }).orElse(null);
-                        DamageTypeData stats = getItemProperties(location, jsonElement);
+                        ArmorStatisticalData stats = getItemProperties(location, jsonElement);
                         if (stats != null) {
                             builder.put(location, stats);
                         }
@@ -91,9 +91,9 @@ public class DamageTypeDataLoader extends SimplePreparableReloadListener<Map<Res
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, DamageTypeData> ItemStatisticsMap, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        DAMAGE_TYPE_DATA.clear();
-        DAMAGE_TYPE_DATA.putAll(ItemStatisticsMap);
+    protected void apply(Map<ResourceLocation, ArmorStatisticalData> ItemStatisticsMap, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+        Armor_STATISTICAL_DATA.clear();
+        Armor_STATISTICAL_DATA.putAll(ItemStatisticsMap);
     }
 
     /**
@@ -105,86 +105,37 @@ public class DamageTypeDataLoader extends SimplePreparableReloadListener<Map<Res
      * @param jsonElement The JSON Element containing Item data
      * @return An ItemStatisticalData object or null if invalid JSON
      */
-    private DamageTypeData getItemProperties(ResourceLocation location, JsonElement jsonElement) {
+    private ArmorStatisticalData getItemProperties(ResourceLocation location, JsonElement jsonElement) {
         if (jsonElement == null || !jsonElement.isJsonObject()) {
             return null;
         }
         JsonObject json = jsonElement.getAsJsonObject();
 
         // Try parsing with the new codec
-        DataResult<DamageTypeData> result =
-                DamageTypeData.CODEC.parse(JsonOps.INSTANCE, json);
+        DataResult<ArmorStatisticalData> result =
+                ArmorStatisticalData.CODEC.parse(JsonOps.INSTANCE, json);
 
         // If parsing was successful, return the parsed data
-        return result.result().orElseGet(() -> parseLegacyJson(location, json));
+        return result.result().orElseThrow();
     }
 
-    /**
-     * Fallback utility method to parse top-level JSON fields from older data that doesn't match the nested codec structure.
-     *
-     * @param json The JsonObject with legacy fields
-     * @return A new ItemStatisticalData constructed from legacy fields
-     */
-    private DamageTypeData parseLegacyJson(ResourceLocation location, JsonObject json) {
-        AeonsPast.LOGGER.warn("Falling back to legacy JSON parsing for Item {}", location);
 
-        List<String> entityTraits = new ArrayList<>();
-        if (json.has("values") && json.get("values").isJsonArray()) {
-            for (JsonElement element : json.getAsJsonArray("values")) {
-                entityTraits.add(element.getAsString());
-            }
-        }
-        // Construct and return the new object
-        var object = new DamageTypeData(
-                entityTraits
 
-        );
+    public static ArmorStatisticalData getByItemStack(ItemStack stack) {
 
-        // Save object to cache folder.
-        Path cacheFolderPath = FMLPaths.GAMEDIR.get().resolve("cache");
-        Path ItemDataPath = cacheFolderPath.resolve("Item_data");
-        Path ItemPath = ItemDataPath.resolve(location.getPath() + ".json");
+        ResourceLocation location = ResourceLocation.bySeparator(stack.getItemHolder().getRegisteredName(),':');
 
-        if (!ItemDataPath.toFile().exists()) {
-            ItemDataPath.toFile().mkdirs();
-        }
+        return Armor_STATISTICAL_DATA.get(location);
 
-        DamageTypeData.CODEC.encodeStart(JsonOps.INSTANCE, object).result().ifPresent(result -> {
-            try {
-                String data = GSON_INSTANCE.toJson(result);
-                Files.writeString(ItemPath, data);
-                AeonsPast.LOGGER.info("Saved converted Item data for {}", location);
-            } catch (IOException e) {
-                AeonsPast.LOGGER.error("Failed to save converted Item data for {}", location, e);
-            }
-        });
 
-        return object;
+
     }
 
-    public static ComplexDamageTypes getByVanillaType(DamageSource source) {
-
-        for (ResourceLocation rkey : DAMAGE_TYPE_DATA.keySet()) {
-
-            Holder<DamageType> typeHolder = source.typeHolder();
-            String key = typeHolder.getRegisteredName();
-            DamageTypeData data = DAMAGE_TYPE_DATA.get(rkey);
-
-            for (String vt : data.damage_types()) {
-
-                if (vt.equals(key)) {
 
 
-                    return ComplexDamageTypes.getbyKey(typeHolder.getKey());
-
-                }
 
 
-            }
 
 
-        }
 
-        return null;
-    }
 }
