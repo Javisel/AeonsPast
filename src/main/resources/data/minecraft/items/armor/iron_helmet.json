@@ -1,20 +1,17 @@
 {
-  "rarity": "COMMON",
-  "armor_type": "HELMET",
+
+  "armor_type": "heavy",
+  "equipment_slot": "head",
   "statistics": [
+
     {
-      "attribute": "minecraft:generic.max_health",
-      "operation": "ADDITION",
-      "min": 5,
-      "max": 10
-    },
-    {
-      "attribute": "aeonspast:armor",
-      "operation": "ADDITION",
-      "min": 2,
-      "max": 4
+      "attribute": "minecraft:armor",
+      "operation": "add_value",
+      "value": 2
+
     }
   ],
   "properties": [
+
   ]
 }

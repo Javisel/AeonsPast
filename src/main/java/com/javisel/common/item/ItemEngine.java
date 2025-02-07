@@ -1,12 +1,16 @@
 package com.javisel.common.item;
 
 import com.javisel.AeonsPast;
+import com.javisel.common.item.armor.ArmorData;
+import com.javisel.common.item.armor.ArmorDataLoader;
+import com.javisel.common.item.armor.ArmorStatisticalData;
 import com.javisel.common.item.weapon.WeaponData;
 import com.javisel.common.item.weapon.WeaponDataLoader;
 import com.javisel.common.item.weapon.WeaponStatisticalData;
 import com.javisel.common.registration.AttributeRegistration;
 import com.javisel.common.registration.DataComponentsRegistration;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -57,6 +61,11 @@ public class ItemEngine {
 
 
         }
+        if (isArmor(stack)) {
+
+            initArmor(owner,stack);
+
+        }
 
 
     }
@@ -69,25 +78,21 @@ public class ItemEngine {
 
         stack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
 
-        Random random = new Random();
 
-        ItemRarity rarity = ItemRarity.getbyPercentChance(new Random().nextInt(101));
+        ItemRarity rarity = ItemRarity.getbyPercentChance(new Random().nextInt(1,101));
         stack.set(DataComponentsRegistration.ITEM_DATA,new ItemData(weapondata.item_type(), rarity.getUnlocalizedName()));
 
 
 
-        int min = Math.max(0,rarity.getId()-1);
-        int max = Math.max(6,rarity.getId()+2);      
 
 
+        double ap = rollStatTier(owner, rarity);
+        double as = rollStatTier(owner, rarity);
+        double cc = rollStatTier(owner, rarity);
+        double cd = rollStatTier(owner, rarity);
+        double sc = rollStatTier(owner, rarity);
 
-        double ap = rollStatTier(owner, ItemRarity.getByID(random.nextInt(min,max)));
-        double as = rollStatTier(owner, ItemRarity.getByID(random.nextInt(min,max)));
-        double cc = rollStatTier(owner, ItemRarity.getByID(random.nextInt(min,max)));
-        double cd = rollStatTier(owner, ItemRarity.getByID(random.nextInt(min,max)));
-        double sc = rollStatTier(owner, ItemRarity.getByID(random.nextInt(min,max)));
-
-        double dur = rollStatTier(owner, ItemRarity.getByID(random.nextInt(min,max)));
+        double dur = rollStatTier(owner, rarity);
         ArrayList<Integer> tiers = new ArrayList<>();
 
 
@@ -98,7 +103,7 @@ public class ItemEngine {
         AttributeModifier statuschance = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(AeonsPast.MODID,"base_stats"), sc* weapondata.status_chance(), AttributeModifier.Operation.ADD_VALUE);
 
 
-        ItemAttributeModifiers modifiers = ItemAttributeModifiers.builder().build();
+
         stack.set(DataComponents.ATTRIBUTE_MODIFIERS,ItemAttributeModifiers.EMPTY);
 
         stack.set(DataComponents.MAX_DAMAGE,(int) (weapondata.durability() * dur));
@@ -115,6 +120,39 @@ public class ItemEngine {
 
 
         stack.set(DataComponents.ATTRIBUTE_MODIFIERS,builder.build());
+
+
+
+    }
+
+    public static void initArmor(LivingEntity roller, ItemStack stack) {
+
+        ArmorStatisticalData armorStats = ArmorDataLoader.getByItemStack(stack);
+
+        stack.remove(DataComponents.ATTRIBUTE_MODIFIERS);
+        ItemAttributeModifiers.Builder builder=  ItemAttributeModifiers.builder();
+        ItemRarity rarity = ItemRarity.getbyPercentChance(new Random().nextInt(1,101));
+
+
+       
+        stack.set(DataComponentsRegistration.ITEM_DATA,new ItemData(armorStats.type().name(), rarity.getUnlocalizedName()));
+        stack.set(DataComponentsRegistration.ARMOR_DATA,new ArmorData(armorStats.type().getSerializedName()));
+
+
+        for (AttributeStatistic statisticsPair : armorStats.statistics()) {
+
+            double ap = rollStatTier(roller,  rarity );
+            AttributeModifier modifier = new AttributeModifier(ResourceLocation.fromNamespaceAndPath(AeonsPast.MODID,"base_stats"),statisticsPair.value() * ap,statisticsPair.operation());
+
+
+            builder.add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(statisticsPair.attribute()),modifier, EquipmentSlotGroup.bySlot(armorStats.equipmentSlot()));
+
+        }
+
+        stack.set(DataComponents.ATTRIBUTE_MODIFIERS,builder.build());
+
+
+        stack.set(DataComponentsRegistration.ITEM_DATA,new ItemData(armorStats.equipmentSlot().getName(), rarity.getUnlocalizedName()));
 
 
 

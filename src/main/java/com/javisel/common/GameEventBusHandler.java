@@ -35,6 +35,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
+import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 
 
 @EventBusSubscriber
@@ -56,7 +58,7 @@ public class GameEventBusHandler {
             if (weaponStatisticalData == null) {
                 weaponStatisticalData=WeaponStatisticalData.DEFAULT;
             }
-            base = (float) ((float) living.getAttributeValue(AttributeRegistration.WEAPON_POWER.getDelegate()) + living.getAttributeValue(Attributes.ATTACK_DAMAGE));
+            base = (float) ((float) event.getOriginalDamage() + living.getAttributeValue(AttributeRegistration.WEAPON_POWER.getDelegate()));
 
             int crits = CombatEngine.rollDirectCrit(living,victim);
 
@@ -77,7 +79,6 @@ public class GameEventBusHandler {
 
             event.setNewDamage(total);
 
-            double schance =  living.getAttributeValue(AttributeRegistration.STATUS_CHANCE);
             boolean status = CombatEngine.rollDirectStatus(living,victim,ComplexDamageTypes.getByString(weaponStatisticalData.damageType()));
 
             victim.setData(DataAttachmentRegistration.ENTITY_COMBAT_DATA, new EntityCombatData(crits,status));
@@ -103,6 +104,16 @@ public class GameEventBusHandler {
 
 
     }
+
+
+    @SubscribeEvent
+    public static void disableJumpCrits(CriticalHitEvent event) {
+
+        event.setCriticalHit(false);
+
+    }
+
+
 
 
     @SubscribeEvent

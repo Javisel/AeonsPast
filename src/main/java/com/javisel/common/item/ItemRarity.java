@@ -8,13 +8,13 @@ import java.util.Random;
 
 public enum ItemRarity {
 
-    TRASH(0, "aeonspast:trash", ChatFormatting.BLACK, 5, .4, 0.5),
+    TRASH(0, "aeonspast:trash", ChatFormatting.DARK_GRAY, 5, .4, 0.5),
     POOR(1, "aeonspast:poor", ChatFormatting.GRAY, 25, .6, 0.75),
     COMMON(2, "aeonspast:common", ChatFormatting.WHITE, 50, .76, 1),
     RARE(3, "aeonspast:rare", ChatFormatting.DARK_BLUE, 10, 1.1, 1.2),
     FABLED(4, "aeonspast:fabled", ChatFormatting.DARK_PURPLE, 8, 1.21, 1.3),
     LEGENDARY(5, "aeonspast:legendary", ChatFormatting.AQUA, 5, 1.31, 1.4),
-    MYTHIC(6, "aeonspast:mythic", ChatFormatting.GOLD, 1, 1.5, 1.5);
+    MYTHIC(6, "aeonspast:mythic", ChatFormatting.GOLD, 1, 1.41, 1.5);
 
     public static final ItemRarity[] ITEM_RARITIES = Arrays.stream(values()).sorted(Comparator.comparingInt(ItemRarity::getId)).toArray(ItemRarity[]::new);
 

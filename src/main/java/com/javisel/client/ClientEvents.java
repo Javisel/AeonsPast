@@ -45,18 +45,28 @@ public class ClientEvents {
 
                 event.getTooltipElements().clear();
                 tooltips.add(Either.left(stack.getHoverName()));
-                MutableComponent translate = Component.translatable("tooltip.sleepingweapon.desc").withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.RED);
+                MutableComponent translate = Component.translatable("tooltip.sleepingitem.desc").withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.RED);
 
                 tooltips.add(Either.left(translate));
                 PacketDistributor.sendToServer(new StackSyncMessage(1));
 
             } else {
-
-
-
                 MutableComponent translate = getRarityComponent(stack);
-
                 tooltips.add(1,Either.left(translate));
+
+                if (ItemEngine.isWeapon(stack)) {
+
+                    renderWeaponTooltip(tooltips,stack);
+
+
+                }
+                if (ItemEngine.isArmor(stack)) {
+
+                    renderArmorTooltip(tooltips,stack);
+
+                }
+
+
             }
 
 
@@ -78,31 +88,27 @@ public static MutableComponent getRarityComponent(ItemStack stack){
 return translate;
 }
 
-public static void adjustAttributeTooltip(ItemStack stack) {
+public static void renderWeaponTooltip( List<Either<FormattedText, TooltipComponent>> tooltips, ItemStack stack) {
 
-
-      ItemAttributeModifiers modifiers = stack.getAttributeModifiers();
-
-      for (ItemAttributeModifiers.Entry modifier : modifiers.modifiers()) {
-
-
-
-
-      }
 
 
 
 }
 
-    public static Component getVariableStringComponent(String key) {
+public static void renderArmorTooltip( List<Either<FormattedText, TooltipComponent>> tooltips, ItemStack stack) {
+
+    MutableComponent type = Component.translatable(stack.get(DataComponentsRegistration.ARMOR_DATA).armorType()).withStyle(ChatFormatting.WHITE);
+
+    tooltips.add(2,Either.left(type));
 
 
-        Component attributeName = Component.translatable(key);
 
-        Component component = attributeName.copy().append(": ");
-
-
-        return component;
     }
+
+
+
+
+
+
 
 }

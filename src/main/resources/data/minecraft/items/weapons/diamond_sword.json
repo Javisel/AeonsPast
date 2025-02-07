@@ -5,12 +5,12 @@
   "range": 4,
   "critical_chance": 25,
   "critical_damage": 1.65,
-  "status_chance": 40,
-  "durability": 2375,
+  "status_chance": 20,
+  "durability": 1561,
   "damage_type": "aeonspast:slash",
   "attack_type": "melee" ,
   "properties": [
-    "aeonspast:fireproof"
+    "aeonspast:sweeping"
   ]
 
 }

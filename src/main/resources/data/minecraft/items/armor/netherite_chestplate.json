@@ -1,21 +1,29 @@
 {
-  "rarity": "EPIC",
-  "armor_type": "CHESTPLATE",
+
+  "armor_type": "heavy",
+  "equipment_slot": "chest",
   "statistics": [
+
     {
-      "attribute": "minecraft:generic.max_health",
-      "operation": "ADDITION",
-      "min": 36,
-      "max": 48
+      "attribute": "minecraft:armor",
+      "operation": "add_value",
+      "value": 8
+
     },
     {
-      "attribute": "aeonspast:armor",
-      "operation": "ADDITION",
-      "min": 11,
-      "max": 22
+      "attribute": "minecraft:armor_toughness",
+      "operation": "add_value",
+      "value": 3
+
+    },
+    {
+      "attribute": "minecraft:knockback_resistance",
+      "operation": "add_multiplied_total",
+      "value": 0.1
+
     }
   ],
   "properties": [
-    "aeonspast:fireproof"
+
   ]
 }

@@ -1,20 +1,18 @@
+
 {
-  "rarity": "COMMON",
-  "armor_type": "LEGGINGS",
+
+  "armor_type": "heavy",
+  "equipment_slot": "legs",
   "statistics": [
+
     {
-      "attribute": "minecraft:generic.max_health",
-      "operation": "ADDITION",
-      "min": 12,
-      "max": 14
-    },
-    {
-      "attribute": "aeonspast:armor",
-      "operation": "ADDITION",
-      "min": 6,
-      "max": 19
+      "attribute": "minecraft:armor",
+      "operation": "add_value",
+      "value": 5
+
     }
   ],
   "properties": [
+
   ]
 }

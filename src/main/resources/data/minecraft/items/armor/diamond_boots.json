@@ -1,20 +1,22 @@
 {
-  "rarity": "RARE",
-  "armor_type": "BOOTS",
+
+  "armor_type": "heavy",
+  "equipment_slot": "feet",
   "statistics": [
+
     {
-      "attribute": "minecraft:generic.max_health",
-      "operation": "ADDITION",
-      "min": 20,
-      "max": 30
-    },
-    {
-      "attribute": "aeonspast:armor",
-      "operation": "ADDITION",
-      "min": 6,
-      "max": 8
+      "attribute": "minecraft:armor",
+      "operation": "add_value",
+      "value": 3
+
+    },   {
+      "attribute": "minecraft:armor_toughness",
+      "operation": "add_value",
+      "value": 2
+
     }
   ],
   "properties": [
+
   ]
 }

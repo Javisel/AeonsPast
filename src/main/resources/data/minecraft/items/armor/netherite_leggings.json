@@ -1,21 +1,29 @@
 {
-  "rarity": "EPIC",
-  "armor_type": "HELMET",
+
+  "armor_type": "heavy",
+  "equipment_slot": "legs",
   "statistics": [
+
     {
-      "attribute": "minecraft:generic.max_health",
-      "operation": "ADDITION",
-      "min": 30,
-      "max": 38
+      "attribute": "minecraft:armor",
+      "operation": "add_value",
+      "value": 6
+
     },
     {
-      "attribute": "aeonspast:armor",
-      "operation": "ADDITION",
-      "min": 9,
-      "max": 15
+      "attribute": "minecraft:armor_toughness",
+      "operation": "add_value",
+      "value": 3
+
+    },
+    {
+      "attribute": "minecraft:knockback_resistance",
+      "operation": "add_multiplied_total",
+      "value": 0.1
+
     }
   ],
   "properties": [
-    "aeonspast:fireproof"
+
   ]
 }

@@ -1,28 +1,22 @@
 {
-  "rarity": "COMMON",
-  "armor_type": "CHESTPLATE",
+
+  "armor_type": "light",
+  "equipment_slot": "chest",
   "statistics": [
+
     {
-      "attribute": "minecraft:generic.max_health",
-      "operation": "ADDITION",
-      "min": 5,
-      "max": 15
+      "attribute": "minecraft:armor",
+      "operation": "add_value",
+      "value": 3
+
     },
     {
-      "attribute": "aeonspast:armor",
-      "operation": "ADDITION",
-      "min": 1,
-      "max": 3.3
-    },
-    {
-      "attribute": "minecraft:generic.movement_speed",
-      "operation": "MULTIPLY_TOTAL",
-      "min": 0.01,
-      "max": 0.02
+      "attribute": "minecraft:movement_speed",
+      "operation": "add_multiplied_total",
+      "value": 0.01
     }
   ],
   "properties": [
-    "aeonspast:nimble",
-    "aeonspast:dyeable"
+    "aeonspast:nimble"
   ]
 }

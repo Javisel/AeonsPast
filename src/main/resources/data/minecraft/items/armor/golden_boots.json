@@ -1,21 +1,17 @@
 {
-  "rarity": "COMMON",
-  "armor_type": "BOOTS",
+
+  "armor_type": "heavy",
+  "equipment_slot": "feet",
   "statistics": [
+
     {
-      "attribute": "minecraft:generic.max_health",
-      "operation": "ADDITION",
-      "min": 1,
-      "max": 6
-    },
-    {
-      "attribute": "aeonspast:armor",
-      "operation": "ADDITION",
-      "min": 1,
-      "max": 2
+      "attribute": "minecraft:armor",
+      "operation": "add_value",
+      "value": 1
+
     }
   ],
   "properties": [
-    "aeonspast:gilded_armour"
+
   ]
 }

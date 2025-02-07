@@ -1,20 +1,22 @@
 {
-  "rarity": "RARE",
-  "armor_type": "CHESTPLATE",
+
+  "armor_type": "heavy",
+  "equipment_slot": "legs",
   "statistics": [
+
     {
-      "attribute": "minecraft:generic.max_health",
-      "operation": "ADDITION",
-      "min": 28,
-      "max": 36
-    },
-    {
-      "attribute": "aeonspast:armor",
-      "operation": "ADDITION",
-      "min": 8,
-      "max": 14
+      "attribute": "minecraft:armor",
+      "operation": "add_value",
+      "value": 6
+
+    },   {
+      "attribute": "minecraft:armor_toughness",
+      "operation": "add_value",
+      "value": 2
+
     }
   ],
   "properties": [
+
   ]
 }

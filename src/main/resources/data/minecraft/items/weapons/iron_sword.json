@@ -1,17 +1,16 @@
 {
   "item_type": "SWORD",
-  "attack_power": 8.0,
+  "attack_power": 6.0,
   "attack_speed": 1.6,
   "range": 4,
   "critical_chance": 25,
   "critical_damage": 1.65,
-  "status_chance": 30,
-  "durability": 2031,
+  "status_chance": 20,
+  "durability": 250,
   "damage_type": "aeonspast:slash",
-  "attack_type": "melee",
+  "attack_type": "melee" ,
   "properties": [
-    "aeonspast:fireproof",
     "aeonspast:sweeping"
-
   ]
+
 }

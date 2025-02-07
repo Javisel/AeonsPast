@@ -1,28 +1,22 @@
 {
-  "rarity": "COMMON",
-  "armor_type": "LEGGINGS",
+
+  "armor_type": "light",
+  "equipment_slot": "legs",
   "statistics": [
+
     {
-      "attribute": "minecraft:generic.max_health",
-      "operation": "ADDITION",
-      "min": 2.5,
-      "max": 10
+      "attribute": "minecraft:armor",
+      "operation": "add_value",
+      "value": 2
+
     },
     {
-      "attribute": "aeonspast:armor",
-      "operation": "ADDITION",
-      "min": 0.6,
-      "max": 2.2
-    },
-    {
-      "attribute": "minecraft:generic.movement_speed",
-      "operation": "MULTIPLY_TOTAL",
-      "min": 0.01,
-      "max": 0.03
+      "attribute": "minecraft:movement_speed",
+      "operation": "add_multiplied_total",
+      "value": 0.02
     }
   ],
   "properties": [
-    "aeonspast:nimble",
-    "aeonspast:dyeable"
+    "aeonspast:nimble"
   ]
 }

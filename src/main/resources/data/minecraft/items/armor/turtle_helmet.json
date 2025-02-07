@@ -1,16 +1,11 @@
 {
 
-  "armor_type": "heavy",
+  "armor_type": "medium",
   "equipment_slot": "head",
   "statistics": [
 
     {
       "attribute": "minecraft:armor",
-      "operation": "add_value",
-      "value": 3
-
-    },   {
-      "attribute": "minecraft:armor_toughness",
       "operation": "add_value",
       "value": 2
 

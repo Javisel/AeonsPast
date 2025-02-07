@@ -1,20 +1,17 @@
 {
-  "rarity": "COMMON",
-  "armor_type": "CHESTPLATE",
+
+  "armor_type": "heavy",
+  "equipment_slot": "chest",
   "statistics": [
+
     {
-      "attribute": "minecraft:generic.max_health",
-      "operation": "ADDITION",
-      "min": 15,
-      "max": 35
-    },
-    {
-      "attribute": "aeonspast:armor",
-      "operation": "ADDITION",
-      "min": 8,
-      "max": 12
+      "attribute": "minecraft:armor",
+      "operation": "add_value",
+      "value": 6
+
     }
   ],
   "properties": [
+
   ]
 }
